@@ -1,0 +1,17 @@
+[24-Jul-2023 07:17:22 Europe/Berlin] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\xampp\htdocs\JGC_APP\email\download3.php:58) in C:\xampp\htdocs\JGC_APP\email\download3.php on line 53
+[24-Jul-2023 07:17:22 Europe/Berlin] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\xampp\htdocs\JGC_APP\email\download3.php:58) in C:\xampp\htdocs\JGC_APP\email\download3.php on line 54
+[24-Jul-2023 07:17:22 Europe/Berlin] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\xampp\htdocs\JGC_APP\email\download3.php:58) in C:\xampp\htdocs\JGC_APP\email\download3.php on line 55
+[24-Jul-2023 07:25:32 Europe/Berlin] PHP Warning:  filesize(): stat failed for EMB BAYAWAN July 24, 2023.zip in C:\xampp\htdocs\JGC_APP\email\download3.php on line 51
+[24-Jul-2023 07:25:32 Europe/Berlin] PHP Warning:  readfile(C:\xampp\htdocs\JGC_APP\email/EMB BAYAWAN July 24, 2023.zip): Failed to open stream: No such file or directory in C:\xampp\htdocs\JGC_APP\email\download3.php on line 54
+[24-Jul-2023 07:25:32 Europe/Berlin] PHP Warning:  unlink(C:\xampp\htdocs\JGC_APP\email/EMB BAYAWAN July 24, 2023.zip): No such file or directory in C:\xampp\htdocs\JGC_APP\email\download3.php on line 57
+[24-Jul-2023 07:25:58 Europe/Berlin] PHP Warning:  filesize(): stat failed for EMB BAYAWAN July 24, 2023.zip in C:\xampp\htdocs\JGC_APP\email\download3.php on line 51
+[24-Jul-2023 07:25:58 Europe/Berlin] PHP Warning:  readfile(C:\xampp\htdocs\JGC_APP\email/EMB BAYAWAN July 24, 2023.zip): Failed to open stream: No such file or directory in C:\xampp\htdocs\JGC_APP\email\download3.php on line 54
+[24-Jul-2023 07:25:58 Europe/Berlin] PHP Warning:  unlink(C:\xampp\htdocs\JGC_APP\email/EMB BAYAWAN July 24, 2023.zip): No such file or directory in C:\xampp\htdocs\JGC_APP\email\download3.php on line 57
+[24-Jul-2023 07:38:10 Europe/Berlin] PHP Warning:  filesize(): stat failed for EMB BAYAWAN July 24, 2023.zip in C:\xampp\htdocs\JGC_APP\email\download3.php on line 56
+[24-Jul-2023 07:38:10 Europe/Berlin] PHP Warning:  readfile(C:\xampp\htdocs\JGC_APP\email/EMB BAYAWAN July 24, 2023.zip): Failed to open stream: No such file or directory in C:\xampp\htdocs\JGC_APP\email\download3.php on line 59
+[24-Jul-2023 07:38:10 Europe/Berlin] PHP Warning:  unlink(C:\xampp\htdocs\JGC_APP\email/EMB BAYAWAN July 24, 2023.zip): No such file or directory in C:\xampp\htdocs\JGC_APP\email\download3.php on line 62
+[24-Jul-2023 07:38:29 Europe/Berlin] PHP Fatal error:  Uncaught ValueError: Invalid or uninitialized Zip object in C:\xampp\htdocs\JGC_APP\email\download3.php:51
+Stack trace:
+#0 C:\xampp\htdocs\JGC_APP\email\download3.php(51): ZipArchive->close()
+#1 {main}
+  thrown in C:\xampp\htdocs\JGC_APP\email\download3.php on line 51

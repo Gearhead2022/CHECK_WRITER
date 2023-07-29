@@ -1,0 +1,165 @@
+/*Adjust seconds for duration (decimal is allowed)*/
+.blink {
+  animation: blinker 1s linear infinite;
+  font-weight: bold;
+  /*color: #1c87c9;*/
+/*  font-size: 30px;
+  font-weight: bold;
+  font-family: sans-serif;*/
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+    /*background-color: crimson;*/
+  }
+}
+
+.atm {
+  color: transparent;
+  text-shadow: 0 0 0 #2196f3;
+
+  &:focus {
+      outline: none;
+  }
+}
+
+.no-gutter > [class*='col-'] {
+    padding-right:2px;
+    padding-left:2px;
+}
+
+.no-gutter-row > [class*='row-'] {
+    padding-top:2px;
+    padding-bottom:2px;
+}
+
+.my_transaction_header{
+	background-color: rgba(0, 0, 0, 0.1);
+	height: 24px;
+	margin-bottom: 10px;
+	border-radius: 7px;
+}
+
+input.numeric {
+/*  color: transparent;
+  text-shadow: 0 0 0 #000000;
+  
+  &:focus {
+      outline: none;
+  }*/
+  caret-color: transparent;
+}
+
+input.numeric3dec {
+  caret-color: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+/*For report tables*/
+table.center {
+  margin-left:auto; 
+  margin-right:auto;
+}
+
+/*REPORT Table Header*/
+.table_head_left_fixed{
+  position: sticky;
+  top: 0;
+  background:rgba(13, 0, 0,0.6);
+  box-shadow: inset 1px 1px #fff, 0 1px #fff;
+}
+
+.table_head_center_fixed{
+  text-align: center;
+  position: sticky;
+  top: 0;
+  background:rgba(13, 0, 0,0.6);
+  box-shadow: inset 1px 1px #fff, 0 1px #fff;
+}
+
+.table_head_right_fixed{
+  text-align: right;
+  position: sticky;
+  top: 0;
+  background:rgba(13, 0, 0,0.6);
+  box-shadow: inset 1px 1px #fff, 0 1px #fff;
+}
+
+/*REPORT sub-total format*/
+.subtotal_border_top_right_bold{
+  font-size:1.1em;
+  font-weight:bold;
+  text-align:right;
+  border-top: 2px solid white;
+}
+
+
+.fixed_header{
+    width: 400px;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.fixed_header tbody{
+  display:block;
+  width: 100%;
+  overflow: auto;
+  height: 100px;
+}
+
+.fixed_header thead tr {
+   display: block;
+}
+
+.fixed_header thead {
+  background: black;
+  color:#fff;
+}
+
+.fixed_header th, .fixed_header td {
+  padding: 5px;
+  text-align: left;
+  width: 200px;
+}
+
+.listClientReceivable tbody tr td:hover{
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.listClientReceivable tbody tr:hover{
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.payment_content .highlightable:hover{
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/*.listClientPendingChecks tbody tr td:hover{
+  background-color: rgba(255, 255, 255, 0.1);
+}*/
+
+.listClientPendingChecks tbody tr:hover{
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.payment{
+  color:cyan;
+}
+.payment:focus{
+  color:yellow;
+}
