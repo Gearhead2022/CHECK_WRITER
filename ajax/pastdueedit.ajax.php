@@ -32,11 +32,20 @@ class pastdueModal{
             $credit = $item['credit'];
             $debit = $item['debit'];
             $pay_mis = $item['pay_mis'];
+            $include_week = $item['include_week'];
+
             if($pay_mis == 1){
                 $status = "checked";
             }else{
                 $status = "";
             }
+
+            if($include_week == 1){
+                $status1 = "checked";
+            }else{
+                $status1 = "";
+            }
+
             
             if($credit != "" ){
                 $amount = $credit;
@@ -66,13 +75,17 @@ class pastdueModal{
             </div>   
             <div class="col-sm-6 form-group">
                 <label for="input-6">AMOUNT</label>
-                <input type="text" class="form-control" id="amount" value="'.$amount.'"  placeholder="Enter Amount" name="amount" autocomplete="nope" required>
+                <input type="text" class="form-control amount" id="amount" value="'.$amount.'"  placeholder="Enter Amount" name="amount" autocomplete="nope" required>
             </div>  
         </div>
         <div class="row">
                   <div class="col-sm-6 form-group">
                     <input type="checkbox" '.$status.'  id="pay_mis" name="pay_mis" autocomplete="nope">
                     <label for="pay_mis">MISCELLANEOUS</label>
+                  </div>
+                  <div class="col-sm-6 form-group include_week1" id="include_week1">
+                    <input type="checkbox" '.$status1.'  id="include_week" value name="include_week" autocomplete="nope">
+                    <label for="pay_mis">INCLUDE IN WEEKLY</label>
                   </div>
                 </div>
     

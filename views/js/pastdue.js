@@ -93,7 +93,6 @@ $('.pastdueTable').DataTable({
                   $('#editLedgerModal .modal-body').append(card);
               });
               $('#editLedgerModal').modal('show');
-
           },
           error: function() {
               alert('Error fetching data');
@@ -541,10 +540,12 @@ $(".branch_name_checker").on("change",function(){
 $(".amount").on("blur",function(){
   var amount1 = document.getElementById('amount');
   var amount = amount1.value;
+  var element = document.getElementById("include_week1");
   if(amount<0){
     // Show hidden check box
-    var element = document.getElementById("include_week1");
     element.hidden = false;
+  }else{
+    element.hidden = true;
   }
  
 

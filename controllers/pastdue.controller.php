@@ -602,10 +602,18 @@ class ControllerPastdue{
 			}else{
 				$pay_mis = 0;
 			}
+			if(isset($_POST['include_week'])){
+				$include_week = 1;
+				
+			}else{
+				$include_week = 0;
+			}
+
             $data = array( "id"=>$_POST["id"],
                             "date"=>$_POST["date"],
                              "refno"=>$_POST["refno"],
                             "amount"=>$_POST["amount"],
+							"include_week"=>$include_week,
 							"pay_mis"=>$pay_mis);
 
                        

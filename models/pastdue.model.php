@@ -549,9 +549,9 @@ static public function mdlEditLedger($table, $data){
     $amountToCheck = $data["amount"];
 
     if($amountToCheck < 0){
-	$stmt = (new Connection)->connect()->prepare("UPDATE $table SET date = :date, refno = :refno, credit = '', debit = :amount, pay_mis = :pay_mis WHERE id = :id");
+	$stmt = (new Connection)->connect()->prepare("UPDATE $table SET date = :date, refno = :refno, credit = '', debit = :amount, pay_mis = :pay_mis, include_week = :include_week WHERE id = :id");
     }else{
-        $stmt = (new Connection)->connect()->prepare("UPDATE $table SET date = :date, refno = :refno, debit = '', credit = :amount, pay_mis = :pay_mis WHERE id = :id");
+        $stmt = (new Connection)->connect()->prepare("UPDATE $table SET date = :date, refno = :refno, debit = '', credit = :amount, pay_mis = :pay_mis, include_week = :include_week WHERE id = :id");
     }
     
 	
@@ -560,6 +560,7 @@ static public function mdlEditLedger($table, $data){
     $stmt->bindParam(":refno", $data["refno"], PDO::PARAM_STR);  
     $stmt->bindParam(":amount", $data["amount"], PDO::PARAM_STR);
     $stmt->bindParam(":pay_mis", $data["pay_mis"], PDO::PARAM_STR);
+    $stmt->bindParam(":include_week", $data["include_week"], PDO::PARAM_STR);
 
 
 	if($stmt->execute()){
