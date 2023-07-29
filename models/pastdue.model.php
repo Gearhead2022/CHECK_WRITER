@@ -722,7 +722,6 @@ static public function mdlCheckFullyPaid($branch_name, $account_no){
     $stmt -> close();
     $stmt = null;
 }
-
 static public function mdlGetAllPDRPerBranch($selectedbranch_name){
     $stmt = (new Connection)->connect()->prepare("SELECT * FROM past_due WHERE branch_name = '$selectedbranch_name'");
     $stmt -> execute();
