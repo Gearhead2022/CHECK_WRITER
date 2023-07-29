@@ -222,13 +222,17 @@
                     </div>   
                     <div class="col-sm-6 form-group">
                         <label for="input-6">AMOUNT</label>
-                        <input type="text" class="form-control" id="amount" placeholder="Enter Amount" name="amount" autocomplete="nope" required>
+                        <input type="text" class="form-control amount"  id="amount" placeholder="Enter Amount" name="amount" autocomplete="nope" required>
                     </div>  
                 </div>
                 <div class="row">
                   <div class="col-sm-6 form-group">
                     <input type="checkbox"  id="pay_mis" name="pay_mis" autocomplete="nope">
                     <label for="pay_mis">MISCELLANEOUS</label>
+                  </div>
+                  <div class="col-sm-6 form-group" id="include_week1" hidden>
+                    <input type="checkbox"  id="include_week" name="include_week" autocomplete="nope">
+                    <label for="pay_mis">INCLUDE IN WEEKLY</label>
                   </div>
                 </div>
                 </div>
