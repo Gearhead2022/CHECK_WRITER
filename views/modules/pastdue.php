@@ -51,16 +51,14 @@
                   <button type="button" id="showPrint"  class="btn btn-light btn-round waves-effect waves-light m-1" onClick="location.href='pastduetarget'"><i class="fa fa-plus-circle"></i> <span>&nbsp;BRANCH TARGETS</span> </button>
                   <button type="button" id="showPrint"  class="btn btn-light btn-round waves-effect waves-light m-1" onClick="location.href='pastdueweeklyreport'"><i class="fa fa-print"></i> <span>&nbsp;GENERATE REPORTS</span> </button>
                   <button type="button" id="showPrint"  class="btn btn-light btn-round waves-effect waves-light m-1" onClick="location.href='pastdueclassreport'"><i class="fa fa-print"></i> <span>&nbsp;CLASS REPORT</span> </button>
-                  <button type="button" class="btn btn-light btn-round waves-effect waves-light m-1 pastdueChecker"><i class="fa fa-print"></i> <span>&nbsp;CHECKER</span> </button>
-                  <button type="button" class="btn btn-light btn-round waves-effect waves-light m-1 pastdueChecker1"><i class="fa fa-print"></i> <span>&nbsp;CHECKER1</span> </button>
-                  <button type="button" class="btn btn-light btn-round waves-effect waves-light m-1" data-toggle="modal" data-target="#pastdueChecker2"><i class="fa fa-book"></i> <span>&nbsp;CHECKER2</span> </button>
-                  <button type="button" id="showPrint"  class="btn btn-light btn-round waves-effect waves-light m-1" onClick="location.href='pastdueledger'"><i class="fa fa-print"></i> <span>&nbsp;LEDGER</span> </button>
+                  <button type="button" id="showPrint"  class="btn btn-light btn-round waves-effect waves-light m-1" onClick="location.href='pastduesummary'"><i class="fa fa-print"></i> <span>&nbsp;PDR PERFORMANCE SUMMARY</span> </button>
+                  <button type="button" class="btn btn-light btn-round waves-effect waves-light m-1 pastdueChecker"><i class="fa fa-refresh"></i> <span>&nbsp;CHECK DUPLICATES</span> </button>
+                  <button type="button" class="btn btn-light btn-round waves-effect waves-light m-1 pastdueChecker1"><i class="fa fa-refresh"></i> <span>&nbsp;CHECK LEDGER</span> </button>
+                  <button type="button" class="btn btn-light btn-round waves-effect waves-light m-1" data-toggle="modal" data-target="#pastdueChecker2"><i class="fa fa-refresh"></i> <span>&nbsp;CHECK FULLY PAID</span> </button>
+                  <button type="button" id="showPrint"  class="btn btn-light btn-round waves-effect waves-light m-1" onClick="location.href='pastdueledger'"><i class="fa fa-book"></i> <span>&nbsp;LEDGER</span> </button>
 
               <?php  }?>
-              
-
-
-                 
+               
             </div>            
             <div class="card-body">
               <div class="table-responsive">

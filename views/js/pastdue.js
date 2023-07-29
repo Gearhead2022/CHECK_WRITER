@@ -536,7 +536,6 @@ $(".branch_name_checker").on("change",function(){
 
 }) 
 
-
 $(".amount").on("blur",function(){
   var amount1 = document.getElementById('amount');
   var amount = amount1.value;
@@ -547,11 +546,37 @@ $(".amount").on("blur",function(){
   }else{
     element.hidden = true;
   }
- 
-
 
 })
 
+
+$(".summaryReport").on("click",function(){
+  var slcMonth1 = document.getElementById('slcMonth');
+  var slcMonth = slcMonth1.value;
+  var type = "summaryReport";
+
+
+  $.ajax({
+    url: 'ajax/pastduereport.ajax.php',
+    data: {
+      slcMonth: slcMonth,
+      type: type
+    },
+    dataType: 'json',
+    success: function(data) {
+      // Close loading screen
+      $('.pastDueSummaryReport').html(data.card);
+      var print = document.getElementById("printWeeklyCollection");
+      print.hidden = false;
+    },
+    error: function() {
+      // Close loading screen
+
+      alert('Error fetching data');
+    }
+  });
+ 
+})
 
 
 $(document).keydown(function(event) {

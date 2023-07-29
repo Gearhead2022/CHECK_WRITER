@@ -9,7 +9,15 @@ $filterBackup= new reportTable();
 // }elseif(isset($_GET['backup_id'])){
 //     $filterBackup -> showFilter();
 // }
-$filterBackup -> showFilter();
+$type = $_GET['type'];
+if($type == "summaryReport"){
+    $filterBackup -> showSummaryReport();
+}else{
+    $filterBackup -> showFilter();
+}
+
+
+
 
 class reportTable{
 	public function showFilter(){
@@ -144,5 +152,83 @@ class reportTable{
 
         echo json_encode($data2);
     }
+
+    public function showSummaryReport(){
+            $slcMonth = $_GET['slcMonth'];
+            $month = date("Y-m-d", strtotime($slcMonth . "-01"));
+            $endDate = date("j", strtotime("last day of " . $month));
+            $range = date("F", strtotime($month)) . " 1-" . $endDate . " " .date("Y", strtotime($month)) ;
+
+            $lastMonth = date('F d, Y', strtotime($month . ' -1 day'));
+            $endMonth = date("F d, Y", strtotime("last day of " . $month));
+        
+            $data = (new ControllerPastdue)->ctrShowEMBBranches();
+            $html = '';
+        
+            $html .= '<thead>
+                <tr>
+                    <th style="border: none;"></th>
+                    <th style="border: none;"></th>
+                    <th style="border: none;"></th>
+                    <th style="text-align: Center;" colspan="8">'.$range.'</th>
+                </tr>
+                <tr>
+                <th style="text-align: center; vertical-align: middle; font-size: 20px; margin-bottom: 20px;" rowspan="2">BRANCH</th>
+                    <th style="text-align: Center;" colspan= "2">TOTAL BAD ACCTS. <br> As of '.$lastMonth.'</th>
+                    <th style="text-align: Center;" colspan= "2">PDR ENDORSE <br>(GOOD TO BAD ACCT.)</th>
+                    <th style="text-align: Center;" colspan= "2">PDR <br> (MISCELLANEOUS)</th>
+                    <th style="text-align: Center;" colspan= "2">PDR COLLECTION / <br> FULLY PAID</th>
+                    <th style="text-align: Center;" colspan= "2">PDR <br> WRITTEN OFF</th>
+                    <th style="text-align: Center;" colspan= "2">TOTAL BAD ACCTS. <br> As of '.$endMonth.' </th>
+            </tr>
+            <tr>
+                <th></th>
+                <th style="text-align: Center;">TOTAL PDR</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>SSP #</th>
+                <th>TOTAL</th>
+           </tr>
+            
+            </thead>
+            <tbody>';
+        
+            foreach ($data as $item) {
+                $branch_name = $item['full_name'];
+                $badAccountslastMonth = (new ControllerPastdue)->ctrGetAllBadAccounts($branch_name, $lastMonth);
+                foreach ($badAccountslastMonth as $item2) {
+                    $count = $item2['total_Bad'];
+                    $result = $item2['result'];
+                }
+
+                $result1 = round($result, 2); // Round to 2 decimal places
+
+                    if ($result1 <0) {
+                        $final_total2 = abs($result1);
+                    }else{
+                        $final_total2 = -1 * $result1;
+
+                    }
+
+                    $formatted_amount = number_format($final_total2, 2, '.',',');
+
+                $html .= '<tr>
+                            <td>'.$branch_name.'</td>
+                            <td style="text-align: right;">'.$count.'</td>
+                            <td style="text-align: right;">'.$formatted_amount.'</td>
+                        </tr>';
+            }
+        
+            $html .= '</tbody>';
+        
+            echo json_encode(['card' => $html]);
+        }
+        
+    }
    
-}

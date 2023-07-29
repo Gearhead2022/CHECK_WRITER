@@ -687,7 +687,6 @@ static public function mdlShowDuplicate(){
 
 
 static public function mdlCheckLedger(){
-	
 
     $stmt = (new Connection)->connect()->prepare("SELECT p.account_no, P.branch_name
     FROM past_due_ledger p
@@ -699,7 +698,6 @@ static public function mdlCheckLedger(){
     $stmt -> close();
     $stmt = null;
 }
-
 
 static public function mdlShowAllLedger(){
     $stmt = (new Connection)->connect()->prepare("SELECT * FROM past_due_ledger");
@@ -724,6 +722,23 @@ static public function mdlCheckFullyPaid($branch_name, $account_no){
 }
 static public function mdlGetAllPDRPerBranch($selectedbranch_name){
     $stmt = (new Connection)->connect()->prepare("SELECT * FROM past_due WHERE branch_name = '$selectedbranch_name'");
+    $stmt -> execute();
+    return $stmt -> fetchAll();
+    $stmt -> close();
+    $stmt = null;
+}
+
+static public function mdlGetAllBadAccounts($branch_name, $lastMonth){
+  
+    $stmt = (new Connection)->connect()->prepare("SELECT
+    (SELECT COUNT(type) FROM past_due WHERE branch_name = '$branch_name' AND refdate <= '$lastMonth' AND
+     (class = 'P' OR class = 'D') ) AS total_Bad,
+      (SELECT -SUM(balance) FROM past_due WHERE branch_name = '$branch_name' AND refdate <='$lastMonth' ) AS total_balance,
+      (SELECT SUM(debit) FROM past_due_ledger WHERE branch_name = '$branch_name' AND date <= '$lastMonth' ) AS total_debit,
+        (SELECT SUM(credit) FROM past_due_ledger WHERE branch_name = '$branch_name' AND date <= '$lastMonth' ) AS total_credit,
+      (SELECT -SUM(balance) FROM past_due WHERE branch_name = '$branch_name' AND refdate <= '$lastMonth')
+       + (SELECT SUM(debit) FROM past_due_ledger WHERE branch_name = '$branch_name' AND date <= '$lastMonth' )+ 
+      (SELECT SUM(credit) FROM past_due_ledger WHERE branch_name = '$branch_name' AND date <= '$lastMonth') AS result;");
     $stmt -> execute();
     return $stmt -> fetchAll();
     $stmt -> close();

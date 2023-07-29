@@ -131,6 +131,7 @@ if($mode=="dark"){?>
             $_GET["route"] == 'pastdueedit' ||
             $_GET["route"] == 'pastduetarget' ||
             $_GET["route"] == 'pastdueledger' ||
+            $_GET["route"] == 'pastduesummary' ||
             $_GET["route"] == 'pastdueclassreport' ||
             $_GET["route"] == 'showpastdue' ||
             $_GET["route"] == 'pastdueweeklyreport' ||

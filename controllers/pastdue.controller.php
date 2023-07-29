@@ -909,6 +909,11 @@ class ControllerPastdue{
 		return $answer;
 	}
 
+	static public function ctrGetAllBadAccounts($branch_name, $lastMonth){
+		$answer = (new ModelPastDue)->mdlGetAllBadAccounts($branch_name, $lastMonth);
+		return $answer;
+	}
+
 
 
     
