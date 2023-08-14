@@ -214,8 +214,6 @@
 </div>          <!-- content-wrapper -->
 
 <?php
- 
-  $deletePastDue = new ControllerPastdue();
-  $deletePastDue  -> ctrDeletePastdue();
-  
+ $addLedger1 = new ControllerPastdue();
+ $addLedger1 -> ctrDeletePastDueLedger();
 ?>

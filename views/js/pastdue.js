@@ -200,6 +200,7 @@ $('.pastdueTable').DataTable({
   })
 
 
+ 
   $(".generateWeeklyReport").on("click", function(){
     var input1 = document.getElementById('weekto');
     var weekto = input1.value;
@@ -212,8 +213,9 @@ $('.pastdueTable').DataTable({
     firstDayOfWeek.setDate(fromDate.getDate() - fromDate.getDay() + 1);
     var lastDayOfWeek = new Date(firstDayOfWeek);
     lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 4);
+    var diffInDays = Math.abs((toDate - fromDate) / (1000 * 60 * 60 * 24));
     
-    if (fromDate.getDay() === 1 && toDate.getDay() === 5 && fromDate >= firstDayOfWeek && toDate <= lastDayOfWeek) {
+    if (fromDate.getDay() === 1 && toDate.getDay() === 5 && fromDate >= firstDayOfWeek && toDate <= lastDayOfWeek || diffInDays <= 4) {
       // Selected date range is valid within the same week
       $(".weeklyreportTable").empty();
 
@@ -268,7 +270,6 @@ $('.pastdueTable').DataTable({
       });
     }
 });
-
 
   $(".printWeeklyCollection").on("click", function(){
     var input2 = document.getElementById('weekfrom');
@@ -443,8 +444,6 @@ $('.pastdueTable').DataTable({
 
   $(".pastdueledgerTable").on("click", "tbody .btnDeleteClient", function(){
     var idClient = $(this).attr("idClient");
-   
-  
     swal({
           title: 'Do you want to delete this record?',
           type: 'warning',
@@ -455,7 +454,7 @@ $('.pastdueTable').DataTable({
           confirmButtonText: 'Yes'
         }).then(function(result){
           if (result.value) {
-              window.location = "index.php?route=pastdue&idClient="+idClient;
+              window.location = "index.php?route=pastdueledger&idClient="+idClient;
           }
     })
   })
@@ -555,6 +554,15 @@ $(".summaryReport").on("click",function(){
   var slcMonth = slcMonth1.value;
   var type = "summaryReport";
 
+  swal({
+    title: "Generating",
+    text: "Please wait...",
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    onOpen: () => {
+      swal.showLoading();
+    }
+  });
 
   $.ajax({
     url: 'ajax/pastduereport.ajax.php',
@@ -564,6 +572,7 @@ $(".summaryReport").on("click",function(){
     },
     dataType: 'json',
     success: function(data) {
+      swal.close();
       // Close loading screen
       $('.pastDueSummaryReport').html(data.card);
       var print = document.getElementById("printWeeklyCollection");
@@ -571,6 +580,7 @@ $(".summaryReport").on("click",function(){
     },
     error: function() {
       // Close loading screen
+      swal.close();
 
       alert('Error fetching data');
     }
@@ -637,5 +647,17 @@ $(document).keydown(function(event) {
   }
 
     
-
+  $(".printSummary1").on("click", function(){
+    var input2 = document.getElementById('slcMonth');
+    var slcMonth = input2.value;
+    // var input1 = document.getElementById('dateTo');
+    // var dateTo = input1.value;
+    // var input3 = document.getElementById('branch_name');
+    // var branch_name = input3.value;
+    // var input4 = document.getElementById('class');
+    // var class_type = input4.value;
+    
+    window.open("extensions/tcpdf/pdf/pastdue_performance_summary.php?slcMonth="+slcMonth);
+  
+  })
 

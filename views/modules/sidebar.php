@@ -95,6 +95,13 @@
         </a>
       </li>
       <?php }?>
+      <?php if($_SESSION['type']=="admin" || $_SESSION['type']=="backup_user" ) {?> 
+      <li>
+      <a href="operations" class="waves-effect">
+          <i class="fa fa-tasks"></i> <span>Operation</span></i>
+        </a>
+      </li>
+      <?php }?>
 
 
       <?php if($_SESSION['type']=="admin") {?> 

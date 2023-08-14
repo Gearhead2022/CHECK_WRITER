@@ -17,6 +17,15 @@ class ControllerPastdue{
 		return $answer;
 	}
 
+	static public function ctrShowFCHNBranches(){
+		$answer = (new ModelPastDue)->mdlShowFCHNBranches();
+		return $answer;
+	}
+	static public function ctrShowFCHMBranches(){
+		$answer = (new ModelPastDue)->mdlShowFCHMBranches();
+		return $answer;
+	}
+
 	static public function ctrShowFCHBranches(){
 		$answer = (new ModelPastDue)->mdlShowFCHBranches();
 		return $answer;
@@ -60,17 +69,17 @@ class ControllerPastdue{
 		return $answer;
 	}
 
-	static public function ctrGetBelow6($full_name, $day1, $day5){
-		$answer = (new ModelPastDue)->mdlGetBelow6( $full_name, $day1, $day5);
+	static public function ctrGetBelow6($full_name, $minRange, $day5){
+		$answer = (new ModelPastDue)->mdlGetBelow6( $full_name, $minRange, $day5);
 		return $answer;
 	}
-	static public function ctrGet6And1year($full_name, $day1, $day5){
-		$answer = (new ModelPastDue)->mdlGet6And1year( $full_name, $day1, $day5);
+	static public function ctrGet6And1year($full_name, $minRange, $day5){
+		$answer = (new ModelPastDue)->mdlGet6And1year( $full_name, $minRange, $day5);
 		return $answer;
 	}
 
-	static public function ctrGetAbove1($full_name, $day1, $day5){
-		$answer = (new ModelPastDue)->mdlGetAbove1( $full_name, $day1, $day5);
+	static public function ctrGetAbove1($full_name, $minRange, $day5){
+		$answer = (new ModelPastDue)->mdlGetAbove1( $full_name, $minRange, $day5);
 		return $answer;
 	}
 
@@ -375,20 +384,23 @@ class ControllerPastdue{
     static public function ctrAddPastDueAccounts(){
 		if(isset($_POST["addPastDueAccount"])){
 			$table = "past_due";
-				$data = array("due_id"=>$_POST["due_id"],
-								"user_id"=>$_POST["user_id"],
-								"branch_name"=>$_POST["branch_name"],
-								"last_name"=>$_POST["last_name"],
-								"first_name"=>$_POST["first_name"],
-								"middle_name"=>$_POST["middle_name"],
-								"account_no"=>$_POST["account_no"],
-                                "age"=>$_POST["age"],
-                                "address"=>$_POST["address"],
-                                "balance"=>$_POST["balance"],
-                                "type"=>$_POST["type"],
-                                "class"=>$_POST["class"],
-                                "bank"=>$_POST["bank"],
-                                "refdate"=>$_POST["refdate"]);
+				$data = array(
+					"due_id" =>$_POST["due_id"],
+					"user_id" => $_POST["user_id"],
+					"branch_name" => strtoupper($_POST["branch_name"]),
+					"last_name" => strtoupper($_POST["last_name"]),
+					"first_name" => strtoupper($_POST["first_name"]),
+					"middle_name" => strtoupper($_POST["middle_name"]),
+					"account_no" => $_POST["account_no"],
+					"age" => $_POST["age"],
+					"address" => strtoupper($_POST["address"]),
+					"balance" => $_POST["balance"],
+					"type" => strtoupper($_POST["type"]),
+					"class" => strtoupper($_POST["class"]),
+					"bank" => strtoupper($_POST["bank"]),
+					"refdate" => $_POST["refdate"]
+				);
+			
 
                        
 
@@ -452,19 +464,20 @@ class ControllerPastdue{
 			$chkAcc = $_GET['account_no'];
 				$data = array("chkAcc"=>$chkAcc,
 								"id"=>$_POST["id"],
-								"last_name"=>$_POST["last_name"],
-								"first_name"=>$_POST["first_name"],
-								"middle_name"=>$_POST["middle_name"],
+								"last_name"=>strtoupper($_POST["last_name"]),
+								"first_name"=>strtoupper($_POST["first_name"]),
+								"middle_name"=>strtoupper($_POST["middle_name"]),
                                 "branch_name"=>$_POST["branch_name"],
 								"account_no"=>$_POST["account_no"],
                                 "age"=>$_POST["age"],
-                                "address"=>$_POST["address"],
+                                "address"=>strtoupper($_POST["address"]),
                                 "balance"=>$_POST["balance"],
-                                "type"=>$_POST["type"],
-                                "class"=>$_POST["class"],
-                                "bank"=>$_POST["bank"],
+                                "type"=>strtoupper($_POST["type"]),
+                                "class"=>strtoupper($_POST["class"]),
+                                "bank"=>strtoupper($_POST["bank"]),
 								"date_change"=>$_POST["date_change"],
                                 "refdate"=>$_POST["refdate"]);
+								
 
 				
 				$answer = (new ModelPastDue)->mdlEditPastDueAccount($table, $data);
@@ -910,10 +923,74 @@ class ControllerPastdue{
 	}
 
 	static public function ctrGetAllBadAccounts($branch_name, $lastMonth){
+		$lastMonth = date("Y-m-d", strtotime($lastMonth));
 		$answer = (new ModelPastDue)->mdlGetAllBadAccounts($branch_name, $lastMonth);
 		return $answer;
 	}
 
+
+	static public function ctrDeletePastDueLedger(){
+		if(isset($_GET['idClient'])){
+			$table = "past_due_ledger";
+			$data = $_GET["idClient"];
+
+			$answer = (new ModelPastDue)->mdlDeleteLedger($table, $data);
+			if($answer == "ok"){
+				echo'<script>
+				swal({
+					  type: "success",
+					  title: "Record has been successfully deleted!",
+					  showConfirmButton: true,
+					  confirmButtonText: "Ok"
+					  }).then(function(result){
+								if (result.value) {
+									window.location = "pastdueledger";
+								}
+							})
+				</script>';
+			}else if($answer == "error"){
+				echo'<script>
+
+				swal({
+					  type: "warning",
+					  title: "Theres an error occur!",
+					  showConfirmButton: true,
+					  confirmButtonText: "Ok"
+					  }).then(function(result){
+								if (result.value) {
+								
+								}
+							})
+				</script>';
+			}
+
+		}
+
+	}
+
+	static public function ctrGetAllGoodToBad($branch_name, $month, $lastDay){
+		$answer = (new ModelPastDue)->mdlGetGoodToBad($branch_name, $month, $lastDay);
+		return $answer;
+	}
+
+	static public function ctrGetAllGoodToBad1($account_no, $branch_name, $refdate){
+		$answer = (new ModelPastDue)->mdlGetGoodToBad1($account_no, $branch_name, $refdate);
+		return $answer;
+	}
+	
+	static public function ctrGetMiscellaneous($branch_name, $month, $lastDay){
+		$answer = (new ModelPastDue)->mdlGetMiscellaneous($branch_name, $month, $lastDay);
+		return $answer;
+	}
+
+	static public function ctrGetPDRWrittenOff($branch_name, $month, $lastDay){
+		$answer = (new ModelPastDue)->mdlGetPDRWrittenOff($branch_name, $month, $lastDay);
+		return $answer;
+	}
+	static public function ctrGetFullyPaid($branch_name, $month, $lastDay){
+		$answer = (new ModelPastDue)->mdlGetFullyPaid($branch_name, $month, $lastDay);
+		return $answer;
+	}
 
 
     

@@ -36,7 +36,7 @@
             </div>          
             <div class="card-body">
             <div class="float-right">
-                <button type="button" id="printWeeklyCollection" hidden class="btn btn-light btn-round waves-effect waves-light m-1 printWeeklyCollection "><i class="fa fa-print"></i> <span>&nbsp;PRINT</span> </button>
+                <button type="button" id="printWeeklyCollection" hidden class="btn btn-light btn-round waves-effect waves-light m-1 printSummary1 "><i class="fa fa-print"></i> <span>&nbsp;PRINT</span> </button>
               </div>
               <div id="pastDueSummaryTable" class="table-responsive">
               <table class="table table-bordered table-hover table-striped pastDueSummaryReport">

@@ -39,6 +39,9 @@ require_once "models/checklist.model.php";
 require_once "controllers/pastdue.controller.php";
 require_once "models/pastdue.model.php";
 
+require_once "controllers/operation.controller.php";
+require_once "models/operation.model.php";
+
 
 
 

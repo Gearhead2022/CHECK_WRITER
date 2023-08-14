@@ -136,6 +136,7 @@ if($mode=="dark"){?>
             $_GET["route"] == 'showpastdue' ||
             $_GET["route"] == 'pastdueweeklyreport' ||
             $_GET["route"] == 'ledger' ||
+            $_GET["route"] == 'operations' ||
             $_GET["route"] == 'checklistadd' ||
             $_GET["route"] == 'clientedit'){
           include "modules/".$_GET["route"].".php";
@@ -208,6 +209,7 @@ if($mode=="dark"){?>
   <script src="views/js/try.js"></script>
   <script src="views/js/fullypaid.js"></script>
   <script src="views/js/pastdue.js"></script>
+  <script src="views/js/operations.js"></script>
   <script src="views/js/script.numeric_key_binding.js"></script>
   <script src="views/js/autologout.js"></script>
 

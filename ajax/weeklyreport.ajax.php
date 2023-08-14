@@ -32,17 +32,23 @@ class reportTable{
             $dateRange[] = $currentDate->format('Y-m-d');
             $currentDate->modify('+1 day');
          }
-            $day1 = $dateRange[0];
-            $day2 = $dateRange[1];
-            $day3 = $dateRange[2];
-            $day4 = $dateRange[3];
-            $day5 = $dateRange[4];
-
-            $formatted_day1 = (new DateTime($day1))->format('F d');
-            $formatted_day2 = (new DateTime($day2))->format('F d');
-            $formatted_day3 = (new DateTime($day3))->format('F d');
-            $formatted_day4 = (new DateTime($day4))->format('F d');
-            $formatted_day5 = (new DateTime($day5))->format('F d');
+         $day1 = isset($dateRange[0]) ? $dateRange[0] : 0;
+         $day2 = isset($dateRange[1]) ? $dateRange[1] : 0;
+         $day3 = isset($dateRange[2]) ? $dateRange[2] : 0;
+         $day4 = isset($dateRange[3]) ? $dateRange[3] : 0;
+         $day5 = isset($dateRange[4]) ? $dateRange[4] : 0;
+     
+         $day1_param = isset($dateRange[0]) ? $dateRange[0] : 0;
+         $day2_param = isset($dateRange[1]) ? $dateRange[1] : 0;
+         $day3_param = isset($dateRange[2]) ? $dateRange[2] : 0;
+         $day4_param = isset($dateRange[3]) ? $dateRange[3] : 0;
+         $day5_param = isset($dateRange[4]) ? $dateRange[4] : 0;
+     
+         $formatted_day1 = ($day1 > 0) ? (new DateTime($day1))->format('F d') : null;
+         $formatted_day2 = ($day2 > 0) ? (new DateTime($day2))->format('F d') : null;
+         $formatted_day3 = ($day3 > 0) ? (new DateTime($day3))->format('F d') : null;
+         $formatted_day4 = ($day4 > 0) ? (new DateTime($day4))->format('F d') : null;
+         $formatted_day5 = ($day5 > 0) ? (new DateTime($day5))->format('F d') : null;
 
             $dataRange = $dateRange;
 
@@ -82,7 +88,20 @@ class reportTable{
 
                 $date1 = date('F j', strtotime($minRange));
                 $date2 = date('j', strtotime($maxRange));
-                $combinedDates = $date1 . '-' . $date2;
+
+                $dateRef = date('d', strtotime($weekfrom));      
+            
+                if($dateRef == '01'){  
+                    $date3 = date('F', strtotime($weekfrom));   
+                    $combinedDates = $date3;  
+                    $minRange = $day1;
+                }elseif($dateRef == '02'){
+                    $combinedDates = $date1;    
+                 
+                }else{
+                    $combinedDates = $date1 . '-' . $date2;
+                }
+                
             
              
 
@@ -115,56 +134,111 @@ class reportTable{
             ]
         ];
 
+        if ($day5_param > 0) {
+            $colspan = '1017px';
+        }elseif ($day4_param > 0) {
+            $colspan = '962PX';
+        }elseif($day3_param > 0){
+            $colspan = '911px';
+        }elseif($day2_param > 0){
+            $colspan = '863PX';
+        }elseif($day1_param > 0){
+            $colspan = '821PX';
+        }
+
 
         foreach ($data1 as &$item) {
            
-            $item['card'] ='
-            <thead>
+        $item['card'] ='    
+        <thead>
+        <tr>
+            <th>EMB BRANCHES</th>
+            <th>BRANCH</th>
+            <th></th>
+        ';
+        // Check and add the formatted day headers only if they are not null
+        if ($day1_param > 0) {
+            $item['card'] .= '<th></th>';
+           
+        }
+        if ($day2_param > 0) {
+            $item['card'] .= '<th></th>';
+        }
+        if ($day3_param > 0) {
+            $item['card'] .= '<th></th>';
+        }
+        if ($day4_param > 0) {
+            $item['card'] .= '<th></th>';
+        }
+        if ($day5_param > 0) {
+            $item['card'] .= '<th></th>';
+        }
+        
+        $item['card'] .='
+            <th></th>
+            <th colspan="3">CLASSIFICATION OF PDR PAYMENT PER ENDORSEMENT DATE</th>
+        </tr>
+    
+        <tr>
+            <th></th>
+            <th>TARGETS</th>
+            <th>CUM AS OF '.$combinedDates.'</th>
+        ';
+        
+        // Check and add the formatted day headers only if they are not null
+        if ($day1_param > 0) {
+            $item['card'] .= '<th>' . $formatted_day1 . '</th>';
+        }
+        if ($day2_param > 0) {
+            $item['card'] .= '<th>' . $formatted_day2 . '</th>';
+        }
+        if ($day3_param > 0) {
+            $item['card'] .= '<th>' . $formatted_day3 . '</th>';
+        }
+        if ($day4_param > 0) {
+            $item['card'] .= '<th>' . $formatted_day4 . '</th>';
+        }
+        if ($day5_param > 0) {
+            $item['card'] .= '<th>' . $formatted_day5 . '</th>';
+        }
+        
+        $item['card'] .='
+            <th>TOTAL</th>
+            <th>BELOW 6 MONTHS</th>
+            <th>6 MONTHS 1 YEAR</th>
+            <th>1 YEAR AND ABOVE</th>
+        </tr>
 
-            <tr>
-              <th>EMB BRANCHES</th>
-              <th>BRANCH</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th colspan="3">CLASSIFICATION OF PDR PAYMENT PER ENDORSEMENT DATE</th>
-            </tr>
-
-            <tr>
-              <th></th>
-              <th>TARGETS</th>
-              <th>CUM AS OF '.$combinedDates.'</th>
-              <th>'.$formatted_day1.'</th>
-              <th>'.$formatted_day2.'</th>
-              <th>'.$formatted_day3.'</th>
-              <th>'.$formatted_day4.'</th>
-              <th>'.$formatted_day5.'</th>
-              <th>TOTAL</th>
-              <th>BELOW 6 MONTHS</th>
-              <th>6 MONTHS 1 YEAR</th>
-              <th>1 YEAR AND ABOVE</th>
-            </tr>
-
-            <tr>
+        <tr>
               <th></th>
               <th>FOR '.$month.'</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th></th>';
+              // Check and add the formatted day headers only if they are not null
+            if ($day1_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day2_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day3_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day4_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day5_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+        $item['card'] .='
               <th></th>
               <th></th>
               <th></th>
               <th></th>
             </tr>
             <tbody>
-            ';
+        ';
+        
+        
         
             if($date != ""){
 
@@ -195,18 +269,62 @@ class reportTable{
         foreach ($data as &$item1) {
             $full_name = $item1['full_name'];
 
-           
             $getTarget = (new ControllerPastdue)->ctrShowReportTarget($full_name, $date);
-            $getDay1 = (new ControllerPastdue)->ctrGetDay1($full_name, $day1);
-            $getDay2 = (new ControllerPastdue)->ctrGetDay2($full_name, $day2);
-            $getDay3 = (new ControllerPastdue)->ctrGetDay3($full_name, $day3);
-            $getDay4 = (new ControllerPastdue)->ctrGetDay3($full_name, $day4);
-            $getDay5 = (new ControllerPastdue)->ctrGetDay3($full_name, $day5);
+            $full_name = $item1['full_name'];
 
-            $getBelow6 = (new ControllerPastdue)->ctrGetBelow6($full_name, $day1, $day5);
-            $getBelow6And1 = (new ControllerPastdue)->ctrGet6And1year($full_name, $day1, $day5);
-            $getAbove1 = (new ControllerPastdue)->ctrGetAbove1($full_name, $day1, $day5);
-            $getCumTotal =  (new ControllerPastdue)->ctrGetCumTotal($full_name, $minRange, $maxRange);
+            $getTarget = (new ControllerPastdue)->ctrShowReportTarget($full_name, $date);
+
+            if ($day1_param > 0) {
+                $getDay1 = (new ControllerPastdue)->ctrGetDay1($full_name, $day1);
+            } else {
+                $getDay1 = "";
+            }
+            if ($day2_param > 0) {
+                $getDay2 = (new ControllerPastdue)->ctrGetDay2($full_name, $day2);
+            } else {
+                $getDay2 = "";
+            }
+            if ($day3_param > 0) {
+                $getDay3 = (new ControllerPastdue)->ctrGetDay3($full_name, $day3);
+            } else {
+                $getDay3 = "";
+            }
+            if ($day4_param > 0) {
+                $getDay4 = (new ControllerPastdue)->ctrGetDay3($full_name, $day4);
+            } else {
+                $getDay4 = "";
+            }
+            if ($day5_param > 0) {
+                $getDay5 = (new ControllerPastdue)->ctrGetDay3($full_name, $day5);
+            } else {
+                $getDay5 = "";
+            }
+
+            if ($day5_param > 0) {
+            $day5 = $day5;
+            }elseif($day4_param > 0) {
+                $day5 = $day4;
+            }elseif($day3_param > 0) {
+                $day5 = $day3;
+            }elseif($day2_param > 0) {
+                $day5 = $day2;
+            }elseif($day1_param > 0) {
+                $day5 = $day1;
+            }
+
+            $getBelow6 = (new ControllerPastdue)->ctrGetBelow6($full_name, $minRange, $day5);
+            $getBelow6And1 = (new ControllerPastdue)->ctrGet6And1year($full_name, $minRange, $day5);
+            $getAbove1 = (new ControllerPastdue)->ctrGetAbove1($full_name, $minRange, $day5);
+
+            $dateRef = date('d', strtotime($weekfrom));      
+            
+                if($dateRef == '01'){  
+                    $getCumTotal =  0;                       
+                 
+                }else{
+                    
+                    $getCumTotal =  (new ControllerPastdue)->ctrGetCumTotal($full_name, $minRange, $maxRange);
+                }
 
             if(!empty($getTarget)){
                 foreach ($getTarget as $key => $value) {
@@ -218,96 +336,131 @@ class reportTable{
             }else{
                 $amount ="&#9;-";
             }
-
+            $day1_total1 = 0;
             if(!empty($getDay1)){
                 foreach ($getDay1 as $key => $value1) {
                     $day1_total1  = $value1['total_day1'];
+                    $total_debit1  = $value1['total_debit1'];
+
+                    if($total_debit1 !=""){
+                        $day1_total1 = $day1_total1 + $total_debit1;
+                    }
                     if($day1_total1 !=""){
                         $day1_total = number_format((float)$day1_total1, 2, '.', ',');
                         $footer_totalDay1 += $day1_total1;
                     }else{
 
                         $day1_total ="";
+                        $day1_total1 = 0;
                     }
                 }
             }else{
                 $day1_total =""; 
+                $day1_total1 = 0;
+                
             }
-
+            $day2_total2 = 0;
              if(!empty($getDay2)){
                 foreach ($getDay2 as $key => $value2) {
                     $day2_total2  = $value2['total_day1'];
+                    $total_debit1  = $value2['total_debit1'];
+
+                    if($total_debit1 !=""){
+                        $day2_total2 = $day2_total2 + $total_debit1;
+                    }
                     if($day2_total2 !=""){
                         $day2_total = number_format((float)$day2_total2, 2, '.', ',');
                         $footer_totalDay2 += $day2_total2;
                     }else{
 
                         $day2_total ="";
+                        $day2_total2 = 0;
                     }
                 }
             }else{
                 $day2_total =""; 
+                $day2_total2 = 0;
+               
             }
-
+            $day3_total3 = 0;
             if(!empty($getDay3)){
                 foreach ($getDay3 as $key => $value3) {
                     $day3_total3  = $value3['total_day1'];
+                    $total_debit1  = $value3['total_debit1'];
+
+                    if($total_debit1 !=""){
+                        $day3_total3 = $day3_total3 + $total_debit1;
+                    }
                     if($day3_total3 !=""){
                         $day3_total = number_format((float)$day3_total3, 2, '.', ',');
                         $footer_totalDay3 += $day3_total3;
                     }else{
 
                         $day3_total ="";
+                        $day3_total3 = 0;
                     }
                 }
             }else{
                 $day3_total =""; 
+                $day3_total3 = 0;
+               
             }
+            $day4_total4 = 0;
             if(!empty($getDay4)){
                 foreach ($getDay4 as $key => $value4) {
                     $day4_total4  = $value4['total_day1'];
+                    $total_debit1  = $value4['total_debit1'];
+
+                    if($total_debit1 !=""){
+                        $day4_total4 = $day4_total4 + $total_debit1;
+                    }
                     if($day4_total4 !=""){
                         $day4_total = number_format((float)$day4_total4, 2, '.', ',');
                         $footer_totalDay4 += $day4_total4;
                     }else{
 
                         $day4_total ="";
+                        $$day4_total4 = 0;
                     }
                 }
             }else{
                 $day4_total =""; 
+                $$day4_total4 = 0;
+                
             }
-
+            $day5_total5 = 0;
             if(!empty($getDay5)){
                 foreach ($getDay5 as $key => $value5) {
                     $day5_total5  = $value5['total_day1'];
+                    $total_debit1  = $value5['total_debit1'];
+
+                    if($total_debit1 !=""){
+                        $day5_total5 = $day5_total5 + $total_debit1;
+                    }
                     if($day5_total5 !=""){
                         $day5_total = number_format((float)$day5_total5, 2, '.', ',');
                         $footer_totalDay5 += $day5_total5;
                     }else{
 
                         $day5_total ="";
+                        $day5_total5 = 0;
                     }
                 }
             }else{
                 $day5_total =""; 
+                $day5_total5 = 0;
+                
             }
-
-            $total1 = $day1_total1 + $day2_total2 + $day3_total3 +$day4_total4 +$day5_total5;
-
-            $footer_totalTotal += $total1;
-
-            if($total1 !=0){
-                $total = number_format((float)$total1, 2, '.', ',');
-            }else{
-                $total = "";
-            }
-
-            
+ 
             if(!empty($getBelow6)){
                 foreach ($getBelow6 as $key => $row) {
                     $below6  = $row['total_below6'];
-                    $branch_name  = $row['branch_name'];
+                    $total_debit1  = $row['total_debit1'];
+
+                    if($total_debit1 !=""){
+                        $below6 = $below6 + $total_debit1;
+                    }
+                
                     if($below6 !=""){
                         $total_below6 = number_format((float)$below6, 2, '.', ',');
                         $footer_totalBelow6 += $below6;
@@ -324,6 +477,11 @@ class reportTable{
             if(!empty($getBelow6And1)){
                 foreach ($getBelow6And1 as $key => $row1) {
                     $below6And1  = $row1['total_below6and1'];
+                    $total_debit1  = $row1['total_debit1'];
+                    if($total_debit1 !=""){
+                        $below6And1 = $below6And1 + $total_debit1;
+                    }
+
                     if($below6And1 !=""){
                         $total_below6And1 = number_format((float)$below6And1, 2, '.', ',');
                         $footer_total6And1 += $below6And1;
@@ -339,6 +497,10 @@ class reportTable{
             if(!empty($getAbove1)){
                 foreach ($getAbove1 as $key => $row2) {
                     $above1  = $row2['total_above1'];
+                    $total_debit1  = $row2['total_debit1'];
+                    if($total_debit1 !=""){
+                        $above1 = $above1 + $total_debit1;
+                    }
                     if($above1 !=""){
                         $total_belowAbove1 = number_format((float)$above1, 2, '.', ',');
                         $footer_totalAbove1 += $above1;
@@ -354,38 +516,65 @@ class reportTable{
             if(!empty($getCumTotal)){
                 foreach ($getCumTotal as $key => $row3) {
                     $totalCumi1  = $row3['total'];
+                    $total_debit  = $row3['total_debit'];
+                    if($total_debit !=""){
+                        $totalCumi1= $totalCumi1 + $total_debit;
+                    }
+
                     if($totalCumi1 !=""){
                         $totalCumi = number_format((float)$totalCumi1, 2, '.', ',');
                         $footer_totalCumi += $totalCumi1;
                     }else{
 
                         $totalCumi =" - ";
+                        $totalCumi1 = 0; 
                     }
                 }
             }else{
                 $totalCumi =" - "; 
+                $totalCumi1 = 0;
             }
 
 
-        
+            $total1 = $day1_total1 + $day2_total2 + $day3_total3 +$day4_total4 +$day5_total5 + $totalCumi1;
+            $footer_totalTotal += $total1;
+            if($total1 !=0){
+                $total = number_format((float)$total1, 2, '.', ',');
+            }else{
+                $total = "";
+            }
           
             $item['card'] .='
-            <tr>
-                <td>'.$full_name.'</td>
-                <td>'.$amount.'</td>
-                <td>'.$totalCumi.'</td>
-                <td>'.$day1_total.'</td>
-                <td>'.$day2_total.'</td>
-                <td>'.$day3_total.'</td>
-                <td>'.$day4_total.'</td>
-                <td>'.$day5_total.'</td>
-                <td>'.$total.'</td>
-                <td>'.$total_below6.'</td>
-                <td>'.$total_below6And1.'</td>
-                <td>'.$total_belowAbove1.'</td>
-          </tr>
-
-            ';
+                <tr style="border:1px solid black;">
+                    <td>'.$full_name.'</td>
+                    <td>'.$amount.'</td>
+                    <td>'.$totalCumi.'</td>
+                ';
+                // Check and add the formatted day headers only if they are not null
+                if ($day1_param > 0) {
+                    $item['card'] .= '<td>'.$day1_total.'</td>';
+                }
+                if ($day2_param > 0) {
+                    $item['card'] .= '<td>'.$day2_total.'</td>';
+                }
+                if ($day3_param > 0) {
+                    $item['card'] .= '<td>'.$day3_total.'</td>';
+                }
+                if ($day4_param > 0) {
+                    $item['card'] .= '<td>'.$day4_total.'</td>';
+                }
+                if ($day5_param > 0) {
+                    $item['card'] .= '<td>'.$day5_total.'</td>';
+                }
+                
+                $item['card'] .=' 
+                    <td>'.$total.'</td>
+                    <td>'.$total_below6.'</td>
+                    <td>'.$total_below6And1.'</td>
+                    <td>'.$total_belowAbove1.'</td>
+                </tr>';
+        
+          
         }
     }
 
@@ -412,78 +601,182 @@ class reportTable{
     $footer_totalBelow66 = number_format((float)$footer_totalBelow6, 2, '.', ',');
     $footer_total6And11 = number_format((float)$footer_total6And1, 2, '.', ',');
     $footer_totalAbove11 = number_format((float)$footer_totalAbove1, 2, '.', ',');
-        $item['card'] .='
-        <tr>
-        <th>TOTAL</th>
+    $item['card'] .='
+
+    <tr>
+    <th>TOTAL</th>
         <th>'.$footer_totalTarget1.'</th>
         <th>'.$footer_totalCumi1.'</th>
-        <th>'.$footer_totalDay11.'</th>
-        <th>'.$footer_totalDay22.'</th>
-        <th>'.$footer_totalDay33.'</th>
-        <th>'.$footer_totalDay44.'</th>
-        <th>'.$footer_totalDay55.'</th>
+    ';
+    // Check and add the formatted day headers only if they are not null
+    if ($day1_param > 0) {
+        $item['card'] .= '<th>'.$footer_totalDay11.'</th>';
+    }
+    if ($day2_param > 0) {
+        $item['card'] .= '<th>'.$footer_totalDay22.'</th>';
+    }
+    if ($day3_param > 0) {
+        $item['card'] .= '<th>'.$footer_totalDay33.'</th>';
+    }
+    if ($day4_param > 0) {
+        $item['card'] .= '<th>'.$footer_totalDay44.'</th>';
+    }
+    if ($day5_param > 0) {
+        $item['card'] .= '<th>'.$footer_totalDay55.'</th>';
+    }
+    
+    $item['card'] .='
         <th>'.$footer_totalTotal1.'</th>
         <th>'.$footer_totalBelow66.'</th>
         <th>'.$footer_total6And11.'</th>
         <th>'.$footer_totalAbove11.'</th>
-  </tr>
-        <tr>
-            <th>FCH BRANCHES</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-        </tr>
-        <tr>
-            <td></td>
-            <td>BRANCH</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>TARGETS</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>FOR '.$month.'</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        ';
+    </tr>
+    
+    <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+    ';
+    // Check and add the formatted day headers only if they are not null
+    if ($day1_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day2_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day3_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day4_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day5_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    
+    $item['card'] .='
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    
+    
+    </tr>
+    
+    <tr>
+    <th>FCH BRANCHES</th>
+    <th></th>
+    ';
+    // Check and add the formatted day headers only if they are not null
+    if ($day1_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day2_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day3_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day4_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day5_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    
+    $item['card'] .='
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+</tr>
+<tr>
+    <td></td>
+    <td>BRANCH</td>
+    <td></td>
+    ';
+    // Check and add the formatted day headers only if they are not null
+    if ($day1_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day2_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day3_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day4_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day5_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    
+    $item['card'] .='
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td></td>
+    <td>TARGETS</td>
+    <td></td>
+    ';
+    // Check and add the formatted day headers only if they are not null
+    if ($day1_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day2_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day3_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day4_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day5_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    
+    $item['card'] .='
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td></td>
+    <td>FOR '.$month.'</td>
+    <td></td>
+    ';
+    // Check and add the formatted day headers only if they are not null
+    if ($day1_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day2_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day3_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day4_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    if ($day5_param > 0) {
+        $item['card'] .= '<th></th>';
+    }
+    
+    $item['card'] .='
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+    
+    ';
         if($date != ""){
 
             $footer_totalTarget=0;
@@ -503,16 +796,58 @@ class reportTable{
     
                
                 $getTarget = (new ControllerPastdue)->ctrShowReportTarget($full_name, $date);
-                $getDay1 = (new ControllerPastdue)->ctrGetDay1($full_name, $day1);
-                $getDay2 = (new ControllerPastdue)->ctrGetDay2($full_name, $day2);
-                $getDay3 = (new ControllerPastdue)->ctrGetDay3($full_name, $day3);
-                $getDay4 = (new ControllerPastdue)->ctrGetDay3($full_name, $day4);
-                $getDay5 = (new ControllerPastdue)->ctrGetDay3($full_name, $day5);
+
+                if ($day1_param > 0) {
+                    $getDay1 = (new ControllerPastdue)->ctrGetDay1($full_name, $day1);
+                } else {
+                    $getDay1 = "";
+                }
+                if ($day2_param > 0) {
+                    $getDay2 = (new ControllerPastdue)->ctrGetDay2($full_name, $day2);
+                } else {
+                    $getDay2 = "";
+                }
+                if ($day3_param > 0) {
+                    $getDay3 = (new ControllerPastdue)->ctrGetDay3($full_name, $day3);
+                } else {
+                    $getDay3 = "";
+                }
+                if ($day4_param > 0) {
+                    $getDay4 = (new ControllerPastdue)->ctrGetDay3($full_name, $day4);
+                } else {
+                    $getDay4 = "";
+                }
+                if ($day5_param > 0) {
+                    $getDay5 = (new ControllerPastdue)->ctrGetDay3($full_name, $day5);
+                } else {
+                    $getDay5 = "";
+                }
     
-                $getBelow6 = (new ControllerPastdue)->ctrGetBelow6($full_name, $day1, $day5);
-                $getBelow6And1 = (new ControllerPastdue)->ctrGet6And1year($full_name, $day1, $day5);
-                $getAbove1 = (new ControllerPastdue)->ctrGetAbove1($full_name, $day1, $day5);
-                $getCumTotal =  (new ControllerPastdue)->ctrGetCumTotal($full_name, $minRange, $maxRange);
+                if ($day5_param > 0) {
+                $day5 = $day5;
+                }elseif($day4_param > 0) {
+                    $day5 = $day4;
+                }elseif($day3_param > 0) {
+                    $day5 = $day3;
+                }elseif($day2_param > 0) {
+                    $day5 = $day2;
+                }elseif($day1_param > 0) {
+                    $day5 = $day1;
+                }
+        
+    
+                $getBelow6 = (new ControllerPastdue)->ctrGetBelow6($full_name, $minRange, $day5);
+                $getBelow6And1 = (new ControllerPastdue)->ctrGet6And1year($full_name, $minRange, $day5);
+                $getAbove1 = (new ControllerPastdue)->ctrGetAbove1($full_name, $minRange, $day5);
+                $dateRef = date('d', strtotime($weekfrom));      
+            
+                if($dateRef == '01'){  
+                    $getCumTotal =  0;                       
+                 
+                }else{
+                    
+                    $getCumTotal =  (new ControllerPastdue)->ctrGetCumTotal($full_name, $minRange, $maxRange);
+                }
     
                 if(!empty($getTarget)){
                     foreach ($getTarget as $key => $value) {
@@ -528,80 +863,115 @@ class reportTable{
                 if(!empty($getDay1)){
                     foreach ($getDay1 as $key => $value1) {
                         $day1_total1  = $value1['total_day1'];
+                        $total_debit1  = $value1['total_debit1'];
+    
+                        if($total_debit1 !=""){
+                            $day1_total1 = $day1_total1 + $total_debit1;
+                        }
                         if($day1_total1 !=""){
                             $day1_total = number_format((float)$day1_total1, 2, '.', ',');
                             $footer_totalDay1 += $day1_total1;
                         }else{
     
                             $day1_total ="";
+                            $day1_total1 = 0;
                         }
                     }
                 }else{
                     $day1_total =""; 
+                    $day1_total1 = 0;
                 }
-    
-                 if(!empty($getDay2)){
+                if(!empty($getDay2)){
                     foreach ($getDay2 as $key => $value2) {
                         $day2_total2  = $value2['total_day1'];
+                        $total_debit1  = $value2['total_debit1'];
+    
+                        if($total_debit1 !=""){
+                            $day2_total2 = $day2_total2 + $total_debit1;
+                        }
                         if($day2_total2 !=""){
                             $day2_total = number_format((float)$day2_total2, 2, '.', ',');
                             $footer_totalDay2 += $day2_total2;
                         }else{
     
                             $day2_total ="";
+                            $day2_total2 = 0;
                         }
                     }
                 }else{
                     $day2_total =""; 
+                    $day2_total2 = 0;
                 }
-    
-                if(!empty($getDay3)){
-                    foreach ($getDay3 as $key => $value3) {
-                        $day3_total3  = $value3['total_day1'];
-                        if($day3_total3 !=""){
-                            $day3_total = number_format((float)$day3_total3, 2, '.', ',');
-                            $footer_totalDay3 += $day3_total3;
-                        }else{
-    
-                            $day3_total ="";
-                        }
+
+              if(!empty($getDay3)){
+                foreach ($getDay3 as $key => $value3) {
+                    $day3_total3  = $value3['total_day1'];
+                    $total_debit1  = $value3['total_debit1'];
+
+                    if($total_debit1 !=""){
+                        $day3_total3 = $day3_total3 + $total_debit1;
                     }
-                }else{
-                    $day3_total =""; 
-                }
-                if(!empty($getDay4)){
-                    foreach ($getDay4 as $key => $value4) {
-                        $day4_total4  = $value4['total_day1'];
-                        if($day4_total4 !=""){
-                            $day4_total = number_format((float)$day4_total4, 2, '.', ',');
-                            $footer_totalDay4 += $day4_total4;
-                        }else{
-    
-                            $day4_total ="";
-                        }
+                    if($day3_total3 !=""){
+                        $day3_total = number_format((float)$day3_total3, 2, '.', ',');
+                        $footer_totalDay3 += $day3_total3;
+                    }else{
+
+                        $day3_total ="";
+                        $day3_total3 = 0;
                     }
-                }else{
-                    $day4_total =""; 
                 }
-    
-                if(!empty($getDay5)){
-                    foreach ($getDay5 as $key => $value5) {
-                        $day5_total5  = $value5['total_day1'];
-                        if($day5_total5 !=""){
-                            $day5_total = number_format((float)$day5_total5, 2, '.', ',');
-                            $footer_totalDay5 += $day5_total5;
-                        }else{
-    
-                            $day5_total ="";
-                        }
+            }else{
+                $day3_total ="";
+                $day3_total3 = 0; 
+            }
+            
+            if(!empty($getDay4)){
+                foreach ($getDay4 as $key => $value4) {
+                    $day4_total4  = $value4['total_day1'];
+                    $total_debit1  = $value4['total_debit1'];
+
+                    if($total_debit1 !=""){
+                        $day4_total4 = $day4_total4 + $total_debit1;
                     }
-                }else{
-                    $day5_total =""; 
+                    if($day4_total4 !=""){
+                        $day4_total = number_format((float)$day4_total4, 2, '.', ',');
+                        $footer_totalDay4 += $day4_total4;
+                    }else{
+
+                        $day4_total ="";
+                        $day4_total4 = 0;
+                    }
                 }
+            }else{
+                $day4_total =""; 
+                $day4_total4 = 0;
+            }
     
-                $total1 = $day1_total1 + $day2_total2 + $day3_total3 +$day4_total4 +$day5_total5;
+            if(!empty($getDay5)){
+                foreach ($getDay5 as $key => $value5) {
+                    $day5_total5  = $value5['total_day1'];
+                    $total_debit1  = $value5['total_debit1'];
+
+                    if($total_debit1 !=""){
+                        $day5_total5 = $day5_total5 + $total_debit1;
+                    }
+                    if($day5_total5 !=""){
+                        $day5_total = number_format((float)$day5_total5, 2, '.', ',');
+                        $footer_totalDay5 += $day5_total5;
+                    }else{
+
+                        $day5_total ="";
+                        $day5_total5 = 0;
+                    }
+                }
+            }else{
+                $day5_total =""; 
+                $day5_total5 = 0;
+            }
     
-                $footer_totalTotal += $total1;
+           
+    
+                
     
                 if($total1 !=0){
                     $total = number_format((float)$total1, 2, '.', ',');
@@ -613,7 +983,12 @@ class reportTable{
                 if(!empty($getBelow6)){
                     foreach ($getBelow6 as $key => $row) {
                         $below6  = $row['total_below6'];
-                        $branch_name  = $row['branch_name'];
+                        $total_debit1  = $row['total_debit1'];
+    
+                        if($total_debit1 !=""){
+                            $below6 = $below6 + $total_debit1;
+                        }
+                    
                         if($below6 !=""){
                             $total_below6 = number_format((float)$below6, 2, '.', ',');
                             $footer_totalBelow6 += $below6;
@@ -630,6 +1005,11 @@ class reportTable{
                 if(!empty($getBelow6And1)){
                     foreach ($getBelow6And1 as $key => $row1) {
                         $below6And1  = $row1['total_below6and1'];
+                        $total_debit1  = $row1['total_debit1'];
+                        if($total_debit1 !=""){
+                            $below6And1 = $below6And1 + $total_debit1;
+                        }
+    
                         if($below6And1 !=""){
                             $total_below6And1 = number_format((float)$below6And1, 2, '.', ',');
                             $footer_total6And1 += $below6And1;
@@ -641,10 +1021,15 @@ class reportTable{
                 }else{
                     $total_below6And1 =""; 
                 }
+
     
                 if(!empty($getAbove1)){
                     foreach ($getAbove1 as $key => $row2) {
                         $above1  = $row2['total_above1'];
+                        $total_debit1  = $row2['total_debit1'];
+                        if($total_debit1 !=""){
+                            $above1 = $above1 + $total_debit1;
+                        }
                         if($above1 !=""){
                             $total_belowAbove1 = number_format((float)$above1, 2, '.', ',');
                             $footer_totalAbove1 += $above1;
@@ -657,39 +1042,65 @@ class reportTable{
                     $total_belowAbove1 =""; 
                 }
                 
-                if(!empty($getCumTotal)){
-                    foreach ($getCumTotal as $key => $row3) {
-                        $totalCumi1  = $row3['total'];
-                        if($totalCumi1 !=""){
-                            $totalCumi = number_format((float)$totalCumi1, 2, '.', ',');
-                            $footer_totalCumi += $totalCumi1;
-                        }else{
-    
-                            $totalCumi =" - ";
-                        }
+                
+            if(!empty($getCumTotal)){
+                foreach ($getCumTotal as $key => $row3) {
+                    $totalCumi1  = $row3['total'];
+                    $total_debit  = $row3['total_debit'];
+                    if($total_debit !=""){
+                        $totalCumi1= $totalCumi1 + $total_debit;
                     }
-                }else{
-                    $totalCumi =" - "; 
+
+                    if($totalCumi1 !=""){
+                        $totalCumi = number_format((float)$totalCumi1, 2, '.', ',');
+                        $footer_totalCumi += $totalCumi1;
+                    }else{
+
+                        $totalCumi =" - ";
+                        $totalCumi1 = 0; 
+                    }
                 }
-    
-    
-            
+            }else{
+                $totalCumi =" - "; 
+                $totalCumi1 = 0;
+            }
+
+                $total1 = $day1_total1 + $day2_total2 + $day3_total3 +$day4_total4 +$day5_total5 +$totalCumi1;
+                $footer_totalTotal += $total1;
+                if($total1 !=0){
+                    $total = number_format((float)$total1, 2, '.', ',');
+                }else{
+                    $total = "";
+                }
               
-                $item['card'] .='
-                <tr>
-                    <td>'.$full_name.'</td>
-                    <td>'.$amount.'</td>
-                    <td>'.$totalCumi.'</td>
-                    <td>'.$day1_total.'</td>
-                    <td>'.$day2_total.'</td>
-                    <td>'.$day3_total.'</td>
-                    <td>'.$day4_total.'</td>
-                    <td>'.$day5_total.'</td>
-                    <td>'.$total.'</td>
-                    <td>'.$total_below6.'</td>
-                    <td>'.$total_below6And1.'</td>
-                    <td>'.$total_belowAbove1.'</td>
-              </tr>
+            $item['card'] .='
+            <tr>
+            <td>'.str_replace("FCH", "","$full_name").'</td>
+                <td>'.$amount.'</td>
+                <td>'.$totalCumi.'</td>
+                ';
+                // Check and add the formatted day headers only if they are not null
+                if ($day1_param > 0) {
+                    $item['card'] .= '<td>'.$day1_total.'</td>';
+                }
+                if ($day2_param > 0) {
+                    $item['card'] .= '<td>'.$day2_total.'</td>';
+                }
+                if ($day3_param > 0) {
+                    $item['card'] .= '<td>'.$day3_total.'</td>';
+                }
+                if ($day4_param > 0) {
+                    $item['card'] .= '<td>'.$day4_total.'</td>';
+                }
+                if ($day5_param > 0) {
+                    $item['card'] .= '<td>'.$day5_total.'</td>';
+                }             
+            $item['card'] .=' 
+                <td>'.$total.'</td>
+                <td>'.$total_below6.'</td>
+                <td>'.$total_below6And1.'</td>
+                <td>'.$total_belowAbove1.'</td>
+            </tr>
     
                 ';
             }
@@ -723,11 +1134,25 @@ class reportTable{
         <th>TOTAL</th>
         <th>'.$footer_totalTarget1.'</th>
         <th>'.$footer_totalCumi1.'</th>
-        <th>'.$footer_totalDay11.'</th>
-        <th>'.$footer_totalDay22.'</th>
-        <th>'.$footer_totalDay33.'</th>
-        <th>'.$footer_totalDay44.'</th>
-        <th>'.$footer_totalDay55.'</th>
+        ';
+        // Check and add the formatted day headers only if they are not null
+        if ($day1_param > 0) {
+            $item['card'] .= '<th>'.$footer_totalDay11.'</th>';
+        }
+        if ($day2_param > 0) {
+            $item['card'] .= '<th>'.$footer_totalDay22.'</th>';
+        }
+        if ($day3_param > 0) {
+            $item['card'] .= '<th>'.$footer_totalDay33.'</th>';
+        }
+        if ($day4_param > 0) {
+            $item['card'] .= '<th>'.$footer_totalDay44.'</th>';
+        }
+        if ($day5_param > 0) {
+            $item['card'] .= '<th>'.$footer_totalDay55.'</th>';
+        }
+        
+    $item['card'] .='
         <th>'.$footer_totalTotal1.'</th>
         <th>'.$footer_totalBelow66.'</th>
         <th>'.$footer_total6And11.'</th>
@@ -737,11 +1162,25 @@ class reportTable{
             <th>RLC BRANCHES</th>
             <th></th>
             <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+            ';
+            // Check and add the formatted day headers only if they are not null
+            if ($day1_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day2_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day3_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day4_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day5_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            
+            $item['card'] .='
             <th></th>
             <th></th>
             <th></th>
@@ -751,11 +1190,25 @@ class reportTable{
             <td></td>
             <td>BRANCH</td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            ';
+            // Check and add the formatted day headers only if they are not null
+            if ($day1_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day2_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day3_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day4_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day5_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            
+            $item['card'] .='
             <td></td>
             <td></td>
             <td></td>
@@ -765,11 +1218,25 @@ class reportTable{
             <td></td>
             <td>TARGETS</td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            ';
+            // Check and add the formatted day headers only if they are not null
+            if ($day1_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day2_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day3_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day4_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day5_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            
+            $item['card'] .='
             <td></td>
             <td></td>
             <td></td>
@@ -779,11 +1246,25 @@ class reportTable{
             <td></td>
             <td>FOR '.$month.'</td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            ';
+            // Check and add the formatted day headers only if they are not null
+            if ($day1_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day2_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day3_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day4_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day5_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            
+            $item['card'] .='
             <td></td>
             <td></td>
             <td></td>
@@ -810,16 +1291,56 @@ class reportTable{
     
                
                 $getTarget = (new ControllerPastdue)->ctrShowReportTarget($full_name, $date);
-                $getDay1 = (new ControllerPastdue)->ctrGetDay1($full_name, $day1);
-                $getDay2 = (new ControllerPastdue)->ctrGetDay2($full_name, $day2);
-                $getDay3 = (new ControllerPastdue)->ctrGetDay3($full_name, $day3);
-                $getDay4 = (new ControllerPastdue)->ctrGetDay3($full_name, $day4);
-                $getDay5 = (new ControllerPastdue)->ctrGetDay3($full_name, $day5);
+                if ($day1_param > 0) {
+                    $getDay1 = (new ControllerPastdue)->ctrGetDay1($full_name, $day1);
+                } else {
+                    $getDay1 = "";
+                }
+                if ($day2_param > 0) {
+                    $getDay2 = (new ControllerPastdue)->ctrGetDay2($full_name, $day2);
+                } else {
+                    $getDay2 = "";
+                }
+                if ($day3_param > 0) {
+                    $getDay3 = (new ControllerPastdue)->ctrGetDay3($full_name, $day3);
+                } else {
+                    $getDay3 = "";
+                }
+                if ($day4_param > 0) {
+                    $getDay4 = (new ControllerPastdue)->ctrGetDay3($full_name, $day4);
+                } else {
+                    $getDay4 = "";
+                }
+                if ($day5_param > 0) {
+                    $getDay5 = (new ControllerPastdue)->ctrGetDay3($full_name, $day5);
+                } else {
+                    $getDay5 = "";
+                }
     
-                $getBelow6 = (new ControllerPastdue)->ctrGetBelow6($full_name, $day1, $day5);
-                $getBelow6And1 = (new ControllerPastdue)->ctrGet6And1year($full_name, $day1, $day5);
-                $getAbove1 = (new ControllerPastdue)->ctrGetAbove1($full_name, $day1, $day5);
-                $getCumTotal =  (new ControllerPastdue)->ctrGetCumTotal($full_name, $minRange, $maxRange);
+                if ($day5_param > 0) {
+                $day5 = $day5;
+                }elseif($day4_param > 0) {
+                    $day5 = $day4;
+                }elseif($day3_param > 0) {
+                    $day5 = $day3;
+                }elseif($day2_param > 0) {
+                    $day5 = $day2;
+                }elseif($day1_param > 0) {
+                    $day5 = $day1;
+                }
+    
+                $getBelow6 = (new ControllerPastdue)->ctrGetBelow6($full_name, $minRange, $day5);
+                $getBelow6And1 = (new ControllerPastdue)->ctrGet6And1year($full_name, $minRange, $day5);
+                $getAbove1 = (new ControllerPastdue)->ctrGetAbove1($full_name, $minRange, $day5);
+                $dateRef = date('d', strtotime($weekfrom));      
+            
+                if($dateRef == '01'){  
+                    $getCumTotal =  0;                       
+                 
+                }else{
+                    
+                    $getCumTotal =  (new ControllerPastdue)->ctrGetCumTotal($full_name, $minRange, $maxRange);
+                }
     
                 if(!empty($getTarget)){
                     foreach ($getTarget as $key => $value) {
@@ -835,80 +1356,115 @@ class reportTable{
                 if(!empty($getDay1)){
                     foreach ($getDay1 as $key => $value1) {
                         $day1_total1  = $value1['total_day1'];
+                        $total_debit1  = $value1['total_debit1'];
+    
+                        if($total_debit1 !=""){
+                            $day1_total1 = $day1_total1 + $total_debit1;
+                        }
                         if($day1_total1 !=""){
                             $day1_total = number_format((float)$day1_total1, 2, '.', ',');
                             $footer_totalDay1 += $day1_total1;
                         }else{
     
                             $day1_total ="";
+                            $day1_total1 = 0;
                         }
                     }
                 }else{
                     $day1_total =""; 
+                    $day1_total1 = 0;
                 }
     
-                 if(!empty($getDay2)){
-                    foreach ($getDay2 as $key => $value2) {
-                        $day2_total2  = $value2['total_day1'];
-                        if($day2_total2 !=""){
-                            $day2_total = number_format((float)$day2_total2, 2, '.', ',');
-                            $footer_totalDay2 += $day2_total2;
-                        }else{
-    
-                            $day2_total ="";
-                        }
+                  if(!empty($getDay2)){
+                foreach ($getDay2 as $key => $value2) {
+                    $day2_total2  = $value2['total_day1'];
+                    $total_debit1  = $value2['total_debit1'];
+
+                    if($total_debit1 !=""){
+                        $day2_total2 = $day2_total2 + $total_debit1;
                     }
-                }else{
-                    $day2_total =""; 
-                }
-    
-                if(!empty($getDay3)){
-                    foreach ($getDay3 as $key => $value3) {
-                        $day3_total3  = $value3['total_day1'];
-                        if($day3_total3 !=""){
-                            $day3_total = number_format((float)$day3_total3, 2, '.', ',');
-                            $footer_totalDay3 += $day3_total3;
-                        }else{
-    
-                            $day3_total ="";
-                        }
+                    if($day2_total2 !=""){
+                        $day2_total = number_format((float)$day2_total2, 2, '.', ',');
+                        $footer_totalDay2 += $day2_total2;
+                    }else{
+
+                        $day2_total ="";
+                        $day2_total2 = 0;
                     }
-                }else{
-                    $day3_total =""; 
                 }
-                if(!empty($getDay4)){
-                    foreach ($getDay4 as $key => $value4) {
-                        $day4_total4  = $value4['total_day1'];
-                        if($day4_total4 !=""){
-                            $day4_total = number_format((float)$day4_total4, 2, '.', ',');
-                            $footer_totalDay4 += $day4_total4;
-                        }else{
+            }else{
+                $day2_total =""; 
+                $day2_total2 = 0;
+            }
     
-                            $day4_total ="";
-                        }
+            if(!empty($getDay3)){
+                foreach ($getDay3 as $key => $value3) {
+                    $day3_total3  = $value3['total_day1'];
+                    $total_debit1  = $value3['total_debit1'];
+
+                    if($total_debit1 !=""){
+                        $day3_total3 = $day3_total3 + $total_debit1;
                     }
-                }else{
-                    $day4_total =""; 
-                }
-    
-                if(!empty($getDay5)){
-                    foreach ($getDay5 as $key => $value5) {
-                        $day5_total5  = $value5['total_day1'];
-                        if($day5_total5 !=""){
-                            $day5_total = number_format((float)$day5_total5, 2, '.', ',');
-                            $footer_totalDay5 += $day5_total5;
-                        }else{
-    
-                            $day5_total ="";
-                        }
+                    if($day3_total3 !=""){
+                        $day3_total = number_format((float)$day3_total3, 2, '.', ',');
+                        $footer_totalDay3 += $day3_total3;
+                    }else{
+
+                        $day3_total ="";
+                        $day3_total3 = 0;
                     }
-                }else{
-                    $day5_total =""; 
                 }
+            }else{
+                $day3_total =""; 
+                $day3_total3 = 0;
+            }
+
+            if(!empty($getDay4)){
+                foreach ($getDay4 as $key => $value4) {
+                    $day4_total4  = $value4['total_day1'];
+                    $total_debit1  = $value4['total_debit1'];
+
+                    if($total_debit1 !=""){
+                        $day4_total4 = $day4_total4 + $total_debit1;
+                    }
+                    if($day4_total4 !=""){
+                        $day4_total = number_format((float)$day4_total4, 2, '.', ',');
+                        $footer_totalDay4 += $day4_total4;
+                    }else{
+
+                        $day4_total ="";
+                        $day4_total4 = 0;
+                    }
+                }
+            }else{
+                $day4_total =""; 
+                $day4_total4 = 0;
+            }
     
-                $total1 = $day1_total1 + $day2_total2 + $day3_total3 +$day4_total4 +$day5_total5;
+            if(!empty($getDay5)){
+                foreach ($getDay5 as $key => $value5) {
+                    $day5_total5  = $value5['total_day1'];
+                    $total_debit1  = $value5['total_debit1'];
+
+                    if($total_debit1 !=""){
+                        $day5_total5 = $day5_total5 + $total_debit1;
+                    }
+                    if($day5_total5 !=""){
+                        $day5_total = number_format((float)$day5_total5, 2, '.', ',');
+                        $footer_totalDay5 += $day5_total5;
+                    }else{
+
+                        $day5_total ="";
+                        $day5_total5 = 0;
+                    }
+                }
+            }else{
+                $day5_total =""; 
+                $day5_total5 = 0;
+            }
+            
     
-                $footer_totalTotal += $total1;
+                
     
                 if($total1 !=0){
                     $total = number_format((float)$total1, 2, '.', ',');
@@ -920,7 +1476,12 @@ class reportTable{
                 if(!empty($getBelow6)){
                     foreach ($getBelow6 as $key => $row) {
                         $below6  = $row['total_below6'];
-                        $branch_name  = $row['branch_name'];
+                        $total_debit1  = $row['total_debit1'];
+    
+                        if($total_debit1 !=""){
+                            $below6 = $below6 + $total_debit1;
+                        }
+                    
                         if($below6 !=""){
                             $total_below6 = number_format((float)$below6, 2, '.', ',');
                             $footer_totalBelow6 += $below6;
@@ -934,64 +1495,99 @@ class reportTable{
                 }
     
     
-                if(!empty($getBelow6And1)){
-                    foreach ($getBelow6And1 as $key => $row1) {
-                        $below6And1  = $row1['total_below6and1'];
-                        if($below6And1 !=""){
-                            $total_below6And1 = number_format((float)$below6And1, 2, '.', ',');
-                            $footer_total6And1 += $below6And1;
-                        }else{
-    
-                            $total_below6And1 ="";
-                        }
+                 if(!empty($getBelow6And1)){
+                foreach ($getBelow6And1 as $key => $row1) {
+                    $below6And1  = $row1['total_below6and1'];
+                    $total_debit1  = $row1['total_debit1'];
+                    if($total_debit1 !=""){
+                        $below6And1 = $below6And1 + $total_debit1;
                     }
-                }else{
-                    $total_below6And1 =""; 
-                }
-    
-                if(!empty($getAbove1)){
-                    foreach ($getAbove1 as $key => $row2) {
-                        $above1  = $row2['total_above1'];
-                        if($above1 !=""){
-                            $total_belowAbove1 = number_format((float)$above1, 2, '.', ',');
-                            $footer_totalAbove1 += $above1;
-                        }else{
-    
-                            $total_belowAbove1 ="";
-                        }
+
+                    if($below6And1 !=""){
+                        $total_below6And1 = number_format((float)$below6And1, 2, '.', ',');
+                        $footer_total6And1 += $below6And1;
+                    }else{
+
+                        $total_below6And1 ="";
                     }
-                }else{
-                    $total_belowAbove1 =""; 
                 }
+            }else{
+                $total_below6And1 =""; 
+            }
+    
+            if(!empty($getAbove1)){
+                foreach ($getAbove1 as $key => $row2) {
+                    $above1  = $row2['total_above1'];
+                    $total_debit1  = $row2['total_debit1'];
+                    if($total_debit1 !=""){
+                        $above1 = $above1 + $total_debit1;
+                    }
+                    if($above1 !=""){
+                        $total_belowAbove1 = number_format((float)$above1, 2, '.', ',');
+                        $footer_totalAbove1 += $above1;
+                    }else{
+
+                        $total_belowAbove1 ="";
+                    }
+                }
+            }else{
+                $total_belowAbove1 =""; 
+            }
                 
-                if(!empty($getCumTotal)){
-                    foreach ($getCumTotal as $key => $row3) {
-                        $totalCumi1  = $row3['total'];
-                        if($totalCumi1 !=""){
-                            $totalCumi = number_format((float)$totalCumi1, 2, '.', ',');
-                            $footer_totalCumi += $totalCumi1;
-                        }else{
-    
-                            $totalCumi =" - ";
-                        }
+                   
+            if(!empty($getCumTotal)){
+                foreach ($getCumTotal as $key => $row3) {
+                    $totalCumi1  = $row3['total'];
+                    $total_debit  = $row3['total_debit'];
+                    if($total_debit !=""){
+                        $totalCumi1= $totalCumi1 + $total_debit;
                     }
-                }else{
-                    $totalCumi =" - "; 
+
+                    if($totalCumi1 !=""){
+                        $totalCumi = number_format((float)$totalCumi1, 2, '.', ',');
+                        $footer_totalCumi += $totalCumi1;
+                    }else{
+
+                        $totalCumi =" - ";
+                        $totalCumi1 = 0; 
+                    }
                 }
+            }else{
+                $totalCumi =" - "; 
+                $totalCumi1 = 0;
+            }
     
-    
-            
+                $total1 = $day1_total1 + $day2_total2 + $day3_total3 +$day4_total4 +$day5_total5 +$totalCumi1;
+                $footer_totalTotal += $total1;
+                if($total1 !=0){
+                    $total = number_format((float)$total1, 2, '.', ',');
+                }else{
+                    $total = "";
+                }
               
                 $item['card'] .='
                 <tr>
-                    <td>'.$full_name.'</td>
+                <td>'.str_replace("RLC", "","$full_name").'</td>
                     <td>'.$amount.'</td>
                     <td>'.$totalCumi.'</td>
-                    <td>'.$day1_total.'</td>
-                    <td>'.$day2_total.'</td>
-                    <td>'.$day3_total.'</td>
-                    <td>'.$day4_total.'</td>
-                    <td>'.$day5_total.'</td>
+                    ';
+                    // Check and add the formatted day headers only if they are not null
+                    if ($day1_param > 0) {
+                        $item['card'] .= '<td>'.$day1_total.'</td>';
+                    }
+                    if ($day2_param > 0) {
+                        $item['card'] .= '<td>'.$day2_total.'</td>';
+                    }
+                    if ($day3_param > 0) {
+                        $item['card'] .= '<td>'.$day3_total.'</td>';
+                    }
+                    if ($day4_param > 0) {
+                        $item['card'] .= '<td>'.$day4_total.'</td>';
+                    }
+                    if ($day5_param > 0) {
+                        $item['card'] .= '<td>'.$day5_total.'</td>';
+                    }             
+                $item['card'] .=' 
                     <td>'.$total.'</td>
                     <td>'.$total_below6.'</td>
                     <td>'.$total_below6And1.'</td>
@@ -1002,6 +1598,17 @@ class reportTable{
         }
         
   
+        $grandTotal_Target += $footer_totalTarget;
+        $grandTotal_Cumi += $footer_totalCumi;
+        $grandTotal_Day1 += $footer_totalDay1;
+        $grandTotal_Day2 += $footer_totalDay2;
+        $grandTotal_Day3 += $footer_totalDay3;
+        $grandTotal_Day4 += $footer_totalDay4;
+        $grandTotal_Day5 += $footer_totalDay5;
+        $grandTotal_Total += $footer_totalTotal;
+        $grandTotal_Below6 += $footer_totalBelow6;
+        $grandTotal_6And1 += $footer_total6And1;
+        $grandTotal_Above1 += $footer_totalAbove1;
     
 
     $footer_totalTarget1 = number_format((float)$footer_totalTarget, 2, '.', ',');
@@ -1022,11 +1629,25 @@ class reportTable{
         <th>TOTAL</th>
         <th>'.$footer_totalTarget1.'</th>
         <th>'.$footer_totalCumi1.'</th>
-        <th>'.$footer_totalDay11.'</th>
-        <th>'.$footer_totalDay22.'</th>
-        <th>'.$footer_totalDay33.'</th>
-        <th>'.$footer_totalDay44.'</th>
-        <th>'.$footer_totalDay55.'</th>
+        ';
+        // Check and add the formatted day headers only if they are not null
+        if ($day1_param > 0) {
+            $item['card'] .= '<th>'.$footer_totalDay11.'</th>';
+        }
+        if ($day2_param > 0) {
+            $item['card'] .= '<th>'.$footer_totalDay22.'</th>';
+        }
+        if ($day3_param > 0) {
+            $item['card'] .= '<th>'.$footer_totalDay33.'</th>';
+        }
+        if ($day4_param > 0) {
+            $item['card'] .= '<th>'.$footer_totalDay44.'</th>';
+        }
+        if ($day5_param > 0) {
+            $item['card'] .= '<th>'.$footer_totalDay55.'</th>';
+        }
+        
+    $item['card'] .='
         <th>'.$footer_totalTotal1.'</th>
         <th>'.$footer_totalBelow66.'</th>
         <th>'.$footer_total6And11.'</th>
@@ -1036,11 +1657,25 @@ class reportTable{
             <th>ELC BRANCHES</th>
             <th></th>
             <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+            ';
+            // Check and add the formatted day headers only if they are not null
+            if ($day1_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day2_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day3_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day4_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day5_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            
+            $item['card'] .='
             <th></th>
             <th></th>
             <th></th>
@@ -1050,11 +1685,25 @@ class reportTable{
             <td></td>
             <td>BRANCH</td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            ';
+            // Check and add the formatted day headers only if they are not null
+            if ($day1_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day2_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day3_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day4_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day5_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            
+            $item['card'] .='
             <td></td>
             <td></td>
             <td></td>
@@ -1064,11 +1713,25 @@ class reportTable{
             <td></td>
             <td>TARGETS</td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            ';
+            // Check and add the formatted day headers only if they are not null
+            if ($day1_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day2_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day3_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day4_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day5_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            
+            $item['card'] .='
             <td></td>
             <td></td>
             <td></td>
@@ -1078,11 +1741,25 @@ class reportTable{
             <td></td>
             <td>FOR '.$month.'</td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            ';
+            // Check and add the formatted day headers only if they are not null
+            if ($day1_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day2_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day3_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day4_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            if ($day5_param > 0) {
+                $item['card'] .= '<th></th>';
+            }
+            
+            $item['card'] .='
             <td></td>
             <td></td>
             <td></td>
@@ -1109,16 +1786,55 @@ class reportTable{
     
                
                 $getTarget = (new ControllerPastdue)->ctrShowReportTarget($full_name, $date);
-                $getDay1 = (new ControllerPastdue)->ctrGetDay1($full_name, $day1);
-                $getDay2 = (new ControllerPastdue)->ctrGetDay2($full_name, $day2);
-                $getDay3 = (new ControllerPastdue)->ctrGetDay3($full_name, $day3);
-                $getDay4 = (new ControllerPastdue)->ctrGetDay3($full_name, $day4);
-                $getDay5 = (new ControllerPastdue)->ctrGetDay3($full_name, $day5);
+                if ($day1_param > 0) {
+                    $getDay1 = (new ControllerPastdue)->ctrGetDay1($full_name, $day1);
+                } else {
+                    $getDay1 = "";
+                }
+                if ($day2_param > 0) {
+                    $getDay2 = (new ControllerPastdue)->ctrGetDay2($full_name, $day2);
+                } else {
+                    $getDay2 = "";
+                }
+                if ($day3_param > 0) {
+                    $getDay3 = (new ControllerPastdue)->ctrGetDay3($full_name, $day3);
+                } else {
+                    $getDay3 = "";
+                }
+                if ($day4_param > 0) {
+                    $getDay4 = (new ControllerPastdue)->ctrGetDay3($full_name, $day4);
+                } else {
+                    $getDay4 = "";
+                }
+                if ($day5_param > 0) {
+                    $getDay5 = (new ControllerPastdue)->ctrGetDay3($full_name, $day5);
+                } else {
+                    $getDay5 = "";
+                }
     
-                $getBelow6 = (new ControllerPastdue)->ctrGetBelow6($full_name, $day1, $day5);
-                $getBelow6And1 = (new ControllerPastdue)->ctrGet6And1year($full_name, $day1, $day5);
-                $getAbove1 = (new ControllerPastdue)->ctrGetAbove1($full_name, $day1, $day5);
-                $getCumTotal =  (new ControllerPastdue)->ctrGetCumTotal($full_name, $minRange, $maxRange);
+                if ($day5_param > 0) {
+                $day5 = $day5;
+                }elseif($day4_param > 0) {
+                    $day5 = $day4;
+                }elseif($day3_param > 0) {
+                    $day5 = $day3;
+                }elseif($day2_param > 0) {
+                    $day5 = $day2;
+                }elseif($day1_param > 0) {
+                    $day5 = $day1;
+                }
+                $getBelow6 = (new ControllerPastdue)->ctrGetBelow6($full_name, $minRange, $day5);
+                $getBelow6And1 = (new ControllerPastdue)->ctrGet6And1year($full_name, $minRange, $day5);
+                $getAbove1 = (new ControllerPastdue)->ctrGetAbove1($full_name, $minRange, $day5);
+                $dateRef = date('d', strtotime($weekfrom));      
+            
+                if($dateRef == '01'){  
+                    $getCumTotal =  0;                       
+                 
+                }else{
+                    
+                    $getCumTotal =  (new ControllerPastdue)->ctrGetCumTotal($full_name, $minRange, $maxRange);
+                }
     
                 if(!empty($getTarget)){
                     foreach ($getTarget as $key => $value) {
@@ -1134,80 +1850,116 @@ class reportTable{
                 if(!empty($getDay1)){
                     foreach ($getDay1 as $key => $value1) {
                         $day1_total1  = $value1['total_day1'];
+                        $total_debit1  = $value1['total_debit1'];
+    
+                        if($total_debit1 !=""){
+                            $day1_total1 = $day1_total1 + $total_debit1;
+                        }
                         if($day1_total1 !=""){
                             $day1_total = number_format((float)$day1_total1, 2, '.', ',');
                             $footer_totalDay1 += $day1_total1;
                         }else{
     
                             $day1_total ="";
+                            $day1_total1 = 0;
                         }
                     }
                 }else{
                     $day1_total =""; 
+                    $day1_total1 = 0;
                 }
-    
-                 if(!empty($getDay2)){
+                
+                if(!empty($getDay2)){
                     foreach ($getDay2 as $key => $value2) {
                         $day2_total2  = $value2['total_day1'];
+                        $total_debit1  = $value2['total_debit1'];
+    
+                        if($total_debit1 !=""){
+                            $day2_total2 = $day2_total2 + $total_debit1;
+                        }
                         if($day2_total2 !=""){
                             $day2_total = number_format((float)$day2_total2, 2, '.', ',');
                             $footer_totalDay2 += $day2_total2;
                         }else{
     
                             $day2_total ="";
+                            $day2_total2 = 0;
                         }
                     }
                 }else{
                     $day2_total =""; 
+                    $day2_total2 = 0;
                 }
     
-                if(!empty($getDay3)){
-                    foreach ($getDay3 as $key => $value3) {
-                        $day3_total3  = $value3['total_day1'];
-                        if($day3_total3 !=""){
-                            $day3_total = number_format((float)$day3_total3, 2, '.', ',');
-                            $footer_totalDay3 += $day3_total3;
-                        }else{
-    
-                            $day3_total ="";
-                        }
+                 if(!empty($getDay3)){
+                foreach ($getDay3 as $key => $value3) {
+                    $day3_total3  = $value3['total_day1'];
+                    $total_debit1  = $value3['total_debit1'];
+
+                    if($total_debit1 !=""){
+                        $day3_total3 = $day3_total3 + $total_debit1;
                     }
-                }else{
-                    $day3_total =""; 
-                }
-                if(!empty($getDay4)){
-                    foreach ($getDay4 as $key => $value4) {
-                        $day4_total4  = $value4['total_day1'];
-                        if($day4_total4 !=""){
-                            $day4_total = number_format((float)$day4_total4, 2, '.', ',');
-                            $footer_totalDay4 += $day4_total4;
-                        }else{
-    
-                            $day4_total ="";
-                        }
+                    if($day3_total3 !=""){
+                        $day3_total = number_format((float)$day3_total3, 2, '.', ',');
+                        $footer_totalDay3 += $day3_total3;
+                    }else{
+
+                        $day3_total ="";
+                        $day3_total3 = 0;
                     }
-                }else{
-                    $day4_total =""; 
                 }
-    
-                if(!empty($getDay5)){
-                    foreach ($getDay5 as $key => $value5) {
-                        $day5_total5  = $value5['total_day1'];
-                        if($day5_total5 !=""){
-                            $day5_total = number_format((float)$day5_total5, 2, '.', ',');
-                            $footer_totalDay5 += $day5_total5;
-                        }else{
-    
-                            $day5_total ="";
-                        }
+            }else{
+                $day3_total =""; 
+                $day3_total3 = 0;
+            }
+
+            if(!empty($getDay4)){
+                foreach ($getDay4 as $key => $value4) {
+                    $day4_total4  = $value4['total_day1'];
+                    $total_debit1  = $value4['total_debit1'];
+
+                    if($total_debit1 !=""){
+                        $day4_total4 = $day4_total4 + $total_debit1;
                     }
-                }else{
-                    $day5_total =""; 
+                    if($day4_total4 !=""){
+                        $day4_total = number_format((float)$day4_total4, 2, '.', ',');
+                        $footer_totalDay4 += $day4_total4;
+                    }else{
+
+                        $day4_total ="";
+                        $day4_total4 = 0;
+                    }
                 }
+            }else{
+                $day4_total =""; 
+                $day4_total4 = 0;
+            }
     
-                $total1 = $day1_total1 + $day2_total2 + $day3_total3 +$day4_total4 +$day5_total5;
+            if(!empty($getDay5)){
+                foreach ($getDay5 as $key => $value5) {
+                    $day5_total5  = $value5['total_day1'];
+                    $total_debit1  = $value5['total_debit1'];
+
+                    if($total_debit1 !=""){
+                        $day5_total5 = $day5_total5 + $total_debit1;
+                    }
+                    if($day5_total5 !=""){
+                        $day5_total = number_format((float)$day5_total5, 2, '.', ',');
+                        $footer_totalDay5 += $day5_total5;
+                    }else{
+
+                        $day5_total ="";
+                        $day5_total5 = 0;
+                    }
+                }
+            }else{
+                $day5_total =""; 
+                $day5_total5 = 0;
+            }
     
-                $footer_totalTotal += $total1;
+           
+    
+                
     
                 if($total1 !=0){
                     $total = number_format((float)$total1, 2, '.', ',');
@@ -1219,7 +1971,12 @@ class reportTable{
                 if(!empty($getBelow6)){
                     foreach ($getBelow6 as $key => $row) {
                         $below6  = $row['total_below6'];
-                        $branch_name  = $row['branch_name'];
+                        $total_debit1  = $row['total_debit1'];
+    
+                        if($total_debit1 !=""){
+                            $below6 = $below6 + $total_debit1;
+                        }
+                    
                         if($below6 !=""){
                             $total_below6 = number_format((float)$below6, 2, '.', ',');
                             $footer_totalBelow6 += $below6;
@@ -1236,6 +1993,11 @@ class reportTable{
                 if(!empty($getBelow6And1)){
                     foreach ($getBelow6And1 as $key => $row1) {
                         $below6And1  = $row1['total_below6and1'];
+                        $total_debit1  = $row1['total_debit1'];
+                        if($total_debit1 !=""){
+                            $below6And1 = $below6And1 + $total_debit1;
+                        }
+    
                         if($below6And1 !=""){
                             $total_below6And1 = number_format((float)$below6And1, 2, '.', ',');
                             $footer_total6And1 += $below6And1;
@@ -1251,6 +2013,10 @@ class reportTable{
                 if(!empty($getAbove1)){
                     foreach ($getAbove1 as $key => $row2) {
                         $above1  = $row2['total_above1'];
+                        $total_debit1  = $row2['total_debit1'];
+                        if($total_debit1 !=""){
+                            $above1 = $above1 + $total_debit1;
+                        }
                         if($above1 !=""){
                             $total_belowAbove1 = number_format((float)$above1, 2, '.', ',');
                             $footer_totalAbove1 += $above1;
@@ -1263,34 +2029,61 @@ class reportTable{
                     $total_belowAbove1 =""; 
                 }
                 
-                if(!empty($getCumTotal)){
-                    foreach ($getCumTotal as $key => $row3) {
-                        $totalCumi1  = $row3['total'];
-                        if($totalCumi1 !=""){
-                            $totalCumi = number_format((float)$totalCumi1, 2, '.', ',');
-                            $footer_totalCumi += $totalCumi1;
-                        }else{
-    
-                            $totalCumi =" - ";
-                        }
+                  
+            if(!empty($getCumTotal)){
+                foreach ($getCumTotal as $key => $row3) {
+                    $totalCumi1  = $row3['total'];
+                    $total_debit  = $row3['total_debit'];
+                    if($total_debit !=""){
+                        $totalCumi1= $totalCumi1 + $total_debit;
                     }
-                }else{
-                    $totalCumi =" - "; 
+
+                    if($totalCumi1 !=""){
+                        $totalCumi = number_format((float)$totalCumi1, 2, '.', ',');
+                        $footer_totalCumi += $totalCumi1;
+                    }else{
+
+                        $totalCumi =" - ";
+                        $totalCumi1 = 0; 
+                    }
                 }
+            }else{
+                $totalCumi =" - "; 
+                $totalCumi1 = 0;
+            }
     
     
-            
+                $total1 = $day1_total1 + $day2_total2 + $day3_total3 +$day4_total4 +$day5_total5 +$totalCumi1;
+                $footer_totalTotal += $total1;
+                if($total1 !=0){
+                    $total = number_format((float)$total1, 2, '.', ',');
+                }else{
+                    $total = "";
+                }
               
                 $item['card'] .='
                 <tr>
-                    <td>'.$full_name.'</td>
+                <td>'.str_replace("ELC", "","$full_name").'</td>
                     <td>'.$amount.'</td>
                     <td>'.$totalCumi.'</td>
-                    <td>'.$day1_total.'</td>
-                    <td>'.$day2_total.'</td>
-                    <td>'.$day3_total.'</td>
-                    <td>'.$day4_total.'</td>
-                    <td>'.$day5_total.'</td>
+                    ';
+                    // Check and add the formatted day headers only if they are not null
+                    if ($day1_param > 0) {
+                        $item['card'] .= '<td>'.$day1_total.'</td>';
+                    }
+                    if ($day2_param > 0) {
+                        $item['card'] .= '<td>'.$day2_total.'</td>';
+                    }
+                    if ($day3_param > 0) {
+                        $item['card'] .= '<td>'.$day3_total.'</td>';
+                    }
+                    if ($day4_param > 0) {
+                        $item['card'] .= '<td>'.$day4_total.'</td>';
+                    }
+                    if ($day5_param > 0) {
+                        $item['card'] .= '<td>'.$day5_total.'</td>';
+                    }             
+                $item['card'] .=' 
                     <td>'.$total.'</td>
                     <td>'.$total_below6.'</td>
                     <td>'.$total_below6And1.'</td>
@@ -1345,11 +2138,25 @@ class reportTable{
         <th>TOTAL</th>
         <th>'.$footer_totalTarget1.'</th>
         <th>'.$footer_totalCumi1.'</th>
-        <th>'.$footer_totalDay11.'</th>
-        <th>'.$footer_totalDay22.'</th>
-        <th>'.$footer_totalDay33.'</th>
-        <th>'.$footer_totalDay44.'</th>
-        <th>'.$footer_totalDay55.'</th>
+        ';
+        // Check and add the formatted day headers only if they are not null
+        if ($day1_param > 0) {
+            $item['card'] .= '<th>'.$footer_totalDay11.'</th>';
+        }
+        if ($day2_param > 0) {
+            $item['card'] .= '<th>'.$footer_totalDay22.'</th>';
+        }
+        if ($day3_param > 0) {
+            $item['card'] .= '<th>'.$footer_totalDay33.'</th>';
+        }
+        if ($day4_param > 0) {
+            $item['card'] .= '<th>'.$footer_totalDay44.'</th>';
+        }
+        if ($day5_param > 0) {
+            $item['card'] .= '<th>'.$footer_totalDay55.'</th>';
+        }
+        
+    $item['card'] .='
         <th>'.$footer_totalTotal1.'</th>
         <th>'.$footer_totalBelow66.'</th>
         <th>'.$footer_total6And11.'</th>
@@ -1359,11 +2166,25 @@ class reportTable{
         <th>GRAND TOTAL</th>
         <th></th>
         <th>'.$grandTotal_Cumi1.'</th>
-        <th>'.$grandTotal_Day11.'</th>
-        <th>'.$grandTotal_Day22.'</th>
-        <th>'.$grandTotal_Day33.'</th>
-        <th>'.$grandTotal_Day44.'</th>
-        <th>'.$grandTotal_Day55.'</th>
+        ';
+        // Check and add the formatted day headers only if they are not null
+        if ($day1_param > 0) {
+            $item['card'] .= '<th>'.$grandTotal_Day11.'</th>';
+        }
+        if ($day2_param > 0) {
+            $item['card'] .= '<th>'.$grandTotal_Day22.'</th>';
+        }
+        if ($day3_param > 0) {
+            $item['card'] .= '<th>'.$grandTotal_Day33.'</th>';
+        }
+        if ($day4_param > 0) {
+            $item['card'] .= '<th>'.$grandTotal_Day44.'</th>';
+        }
+        if ($day5_param > 0) {
+            $item['card'] .= '<th>'.$grandTotal_Day55.'</th>';
+        }
+        
+    $item['card'] .='
         <th>'.$grandTotal_Total1.'</th>
         <th>'.$grandTotal_Below66.'</th>
         <th>'.$grandTotal_6And11.'</th>
@@ -1373,11 +2194,25 @@ class reportTable{
         <th>TOTAL TARGET</th>
         <th>'.$grandTotal_Target1.'</th>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        ';
+        // Check and add the formatted day headers only if they are not null
+        if ($day1_param > 0) {
+            $item['card'] .= '<th></th>';
+        }
+        if ($day2_param > 0) {
+            $item['card'] .= '<th></th>';
+        }
+        if ($day3_param > 0) {
+            $item['card'] .= '<th></th>';
+        }
+        if ($day4_param > 0) {
+            $item['card'] .= '<th></th>';
+        }
+        if ($day5_param > 0) {
+            $item['card'] .= '<th></th>';
+        }
+        
+        $item['card'] .='
         <td></td>
         <td></td>
         <td></td>

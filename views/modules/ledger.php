@@ -179,7 +179,7 @@
     <div class="overlay toggle-menu"></div>
     <?php
                      $addLedger = new ControllerPastdue();
-                    $addLedger -> ctrDeleteLedger();
+                     $addLedger -> ctrDeleteLedger();
                     ?>
 
   </div>        <!-- container-fluid -->

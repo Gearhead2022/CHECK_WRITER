@@ -43,7 +43,6 @@ class pastdueModal{
     }
 
     public function showChecker1Modal(){
-       
     
         $data = (new ControllerPastdue)->ctrCheckLedger();
     
@@ -64,19 +63,23 @@ class pastdueModal{
     }
 
     public function showChecker2Modal($selectedbranch_name){
-       
+        $i=0;
         $data1 = (new ControllerPastdue)->ctrGetAllPDRPerBranch($selectedbranch_name);
         foreach ($data1 as &$item) {
             $branch_name = $item['branch_name'];
             $account_no = $item['account_no'];
             $last_name = $item['last_name'];
+            $item['card']='';
+          
 
             $data = (new ControllerPastdue)->ctrCheckFullyPaid($branch_name, $account_no);
-
             foreach ($data as &$item1) {
+           
+          
                 $result = $item1['result'];
                 if($result == 0 && $result != ""){
-                    $item['card'] ='
+                    $i++;
+                    $item['card'] .='
                     <tr>
                       <td>'.$branch_name.'</td>
                       <td>'.$account_no.'</td>
@@ -84,10 +87,16 @@ class pastdueModal{
                       <td>'.$result.'</td>
                     </tr>
                     ';
+               
                 }
 
             }
         }
+        $item['card'] .=' 
+        <tr>
+            <td>Total = '.$i.'</td>
+            </tr>
+        ';
 
         echo json_encode($data1);
     }

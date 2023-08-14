@@ -33,6 +33,7 @@ class pastdueModal{
             $debit = $item['debit'];
             $pay_mis = $item['pay_mis'];
             $include_week = $item['include_week'];
+            $date = $item['date'];
 
             if($pay_mis == 1){
                 $status = "checked";
@@ -65,7 +66,7 @@ class pastdueModal{
             </div>   
             <div class="col-sm-6 form-group">
                 <label for="input-6">DATE</label>
-                <input type="date" class="form-control" id="date" value="'.$date_now.'" placeholder="Enter Folder Name" name="date" autocomplete="nope" required>
+                <input type="date" class="form-control" id="date" value="'.$date.'" placeholder="Enter Folder Name" name="date" autocomplete="nope" required>
             </div>  
         </div>
         <div class="row">

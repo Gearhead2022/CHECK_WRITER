@@ -41,19 +41,41 @@ class ModelPastDue{
     static public function mdlShowEMBBranches(){
 	
 
-	    $stmt = (new Connection)->connect()->prepare("SELECT * FROM accounts WHERE full_name LIKE 'EMB%' ORDER BY full_name");
+	    $stmt = (new Connection)->connect()->prepare("SELECT branch_name as full_name FROM branch_names WHERE branch_name LIKE 'EMB%'");
 	
 		$stmt -> execute();
-		return $stmt -> fetchAll();
+		return $stmt -> fetchAll(); 
+		$stmt -> close();
+		$stmt = null;
+	}
+    static public function mdlShowFCHNBranches(){
+	
+
+	    $stmt = (new Connection)->connect()->prepare("SELECT branch_name as full_name FROM branch_names 
+        WHERE branch_name LIKE 'FCH%' AND branch_name NOT IN ('FCH PARANAQUE', 'FCH MUNTINLUPA')");
+	
+		$stmt -> execute();
+		return $stmt -> fetchAll(); 
+		$stmt -> close();
+		$stmt = null;
+	}
+    static public function mdlShowFCHMBranches(){
+	
+
+	    $stmt = (new Connection)->connect()->prepare("SELECT branch_name as full_name FROM branch_names 
+        WHERE branch_name LIKE 'FCH%' AND branch_name = 'FCH PARANAQUE' OR branch_name  =  'FCH MUNTINLUPA' ");
+	
+		$stmt -> execute();
+		return $stmt -> fetchAll(); 
 		$stmt -> close();
 		$stmt = null;
 	}
 
+
     static public function mdlShowFCHBranches(){
 	
 
-	    $stmt = (new Connection)->connect()->prepare("SELECT * FROM accounts WHERE full_name LIKE 'FCH%' ORDER BY full_name");
-	
+	    $stmt = (new Connection)->connect()->prepare("SELECT branch_name as full_name FROM branch_names WHERE branch_name LIKE 'FCH%'");
 		$stmt -> execute();
 		return $stmt -> fetchAll();
 		$stmt -> close();
@@ -63,7 +85,7 @@ class ModelPastDue{
     static public function mdlShoRLCBranches(){
 	
 
-	    $stmt = (new Connection)->connect()->prepare("SELECT * FROM accounts WHERE full_name LIKE 'RLC%' ORDER BY full_name");
+	    $stmt = (new Connection)->connect()->prepare("SELECT branch_name as full_name  FROM branch_names WHERE branch_name LIKE 'RLC%'");
 	
 		$stmt -> execute();
 		return $stmt -> fetchAll();
@@ -75,7 +97,7 @@ class ModelPastDue{
     static public function mdlShoELCBranches(){
 	
 
-	    $stmt = (new Connection)->connect()->prepare("SELECT * FROM accounts WHERE full_name LIKE 'ELC%' ORDER BY full_name");
+	    $stmt = (new Connection)->connect()->prepare("SELECT branch_name as full_name FROM branch_names WHERE branch_name LIKE 'ELC%'");
 	
 		$stmt -> execute();
 		return $stmt -> fetchAll();
@@ -118,8 +140,8 @@ class ModelPastDue{
     static public function mdlGetDay1($full_name, $day1){
 	
 
-	    $stmt = (new Connection)->connect()->prepare("SELECT *, SUM(credit) AS total_day1 FROM `past_due_ledger` WHERE date = '$day1' AND credit >= 0 AND branch_name = '$full_name';");
-	
+	    $stmt = (new Connection)->connect()->prepare("SELECT (SELECT SUM(debit) FROM `past_due_ledger` WHERE date = '$day1' AND include_week = 1 AND branch_name = '$full_name') AS total_debit1, (SELECT SUM(credit) FROM `past_due_ledger` 
+        WHERE date = '$day1' AND credit >= 0 AND branch_name = '$full_name') AS total_day1");
 		$stmt -> execute();
 		return $stmt -> fetchAll();
 		$stmt -> close();   
@@ -128,7 +150,8 @@ class ModelPastDue{
     static public function mdlGetDay2($full_name, $day2){
 	
 
-	    $stmt = (new Connection)->connect()->prepare("SELECT *, SUM(credit) AS total_day1 FROM `past_due_ledger` WHERE date = '$day2' AND credit >= 0  AND branch_name = '$full_name';");
+	    $stmt = (new Connection)->connect()->prepare("SELECT (SELECT SUM(debit) FROM `past_due_ledger` WHERE date = '$day2' AND include_week = 1 AND branch_name = '$full_name') AS total_debit1, (SELECT SUM(credit) FROM `past_due_ledger` 
+        WHERE date = '$day2' AND credit >= 0 AND branch_name = '$full_name') AS total_day1");
 	
 		$stmt -> execute();
 		return $stmt -> fetchAll();
@@ -137,11 +160,13 @@ class ModelPastDue{
 	}
 
 
-    static public function mdlGetBelow6($full_name, $day1, $day5){
+    static public function mdlGetBelow6($full_name, $minRange, $day5){
 
-	    $stmt = (new Connection)->connect()->prepare("SELECT *, SUM(credit) AS total_below6 FROM `past_due_ledger` a 
-        INNER JOIN past_due b ON a.account_no = b.account_no AND a.branch_name = b.branch_name WHERE  a.date >= '$day1' 
-        AND a.date <= '$day5' AND a.branch_name = '$full_name' AND a.credit >= 0 AND b.refdate >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)");
+	    $stmt = (new Connection)->connect()->prepare("SELECT (SELECT SUM(debit) FROM `past_due_ledger` a 
+        INNER JOIN past_due b ON a.account_no = b.account_no AND a.branch_name = b.branch_name WHERE  a.date >= '$minRange' 
+        AND a.date <= '$day5' AND a.branch_name = '$full_name' AND a.include_week = 1 AND b.refdate >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)) AS total_debit1  ,(SELECT SUM(credit) FROM `past_due_ledger` a 
+        INNER JOIN past_due b ON a.account_no = b.account_no AND a.branch_name = b.branch_name WHERE  a.date >= '$minRange' 
+        AND a.date <= '$day5' AND a.branch_name = '$full_name' AND a.credit >= 0 AND b.refdate >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)) AS total_below6  ");
 	
 		$stmt -> execute();
 		return $stmt -> fetchAll();
@@ -149,11 +174,15 @@ class ModelPastDue{
 		$stmt = null;
 	}
 
-    static public function mdlGet6And1year($full_name, $day1, $day5){
+    static public function mdlGet6And1year($full_name, $minRange, $day5){
 
-	    $stmt = (new Connection)->connect()->prepare("SELECT *, SUM(credit) AS total_below6and1 FROM `past_due_ledger` a INNER JOIN past_due b ON a.account_no = b.account_no  AND a.branch_name = b.branch_name
-        WHERE  a.date >= '$day1' AND a.date <= '$day5' AND a.branch_name = '$full_name' AND a.credit >= 0 AND b.refdate > DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
-        AND b.refdate < DATE_SUB(CURDATE(), INTERVAL 6 MONTH)");
+	    $stmt = (new Connection)->connect()->prepare("SELECT (SELECT SUM(debit) FROM `past_due_ledger` a 
+        INNER JOIN past_due b ON a.account_no = b.account_no AND a.branch_name = b.branch_name WHERE  a.date >= '$minRange' 
+        AND a.date <= '$day5' AND a.branch_name = '$full_name' AND a.include_week = 1 AND b.refdate > DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
+        AND b.refdate < DATE_SUB(CURDATE(), INTERVAL 6 MONTH)) AS total_debit1 ,
+        (SELECT SUM(credit) FROM `past_due_ledger` a INNER JOIN past_due b ON a.account_no = b.account_no  AND a.branch_name = b.branch_name
+        WHERE  a.date >= '$minRange' AND a.date <= '$day5' AND a.branch_name = '$full_name' AND a.credit >= 0 AND b.refdate > DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
+        AND b.refdate < DATE_SUB(CURDATE(), INTERVAL 6 MONTH)) AS total_below6and1 ");
 	
 		$stmt -> execute();
 		return $stmt -> fetchAll();
@@ -162,11 +191,14 @@ class ModelPastDue{
 	}
 
 
-    static public function mdlGetAbove1($full_name, $day1, $day5){
+    static public function mdlGetAbove1($full_name, $minRange, $day5){
 
-	    $stmt = (new Connection)->connect()->prepare("SELECT *, SUM(credit) AS total_above1  FROM `past_due_ledger` a INNER JOIN past_due b ON a.account_no = b.account_no AND a.branch_name = b.branch_name
-         WHERE  a.date >= '$day1' AND a.date <= '$day5' AND a.branch_name = '$full_name'
-          AND a.credit >= 0 AND b.refdate <= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)");
+	    $stmt = (new Connection)->connect()->prepare("SELECT (SELECT SUM(debit) FROM `past_due_ledger` a 
+        INNER JOIN past_due b ON a.account_no = b.account_no AND a.branch_name = b.branch_name WHERE  a.date >= '$minRange' 
+        AND a.date <= '$day5' AND a.branch_name = '$full_name' AND a.include_week = 1 AND b.refdate <= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)) AS total_debit1,
+         (SELECT SUM(credit) FROM `past_due_ledger` a INNER JOIN past_due b ON a.account_no = b.account_no AND a.branch_name = b.branch_name
+         WHERE  a.date >= '$minRange' AND a.date <= '$day5' AND a.branch_name = '$full_name'
+          AND a.credit >= 0 AND b.refdate <= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)) AS total_above1");
 	
 		$stmt -> execute();
 		return $stmt -> fetchAll();
@@ -176,8 +208,9 @@ class ModelPastDue{
 
     static public function mdlGetCumTota($full_name, $minRange, $maxRange){
 
-	    $stmt = (new Connection)->connect()->prepare("SELECT *, SUM(credit) AS total  FROM `past_due_ledger`
-         WHERE  date >= '$minRange' AND date <= '$maxRange' AND credit >= 0 AND branch_name = '$full_name'
+	    $stmt = (new Connection)->connect()->prepare("SELECT (SELECT SUM(debit) FROM `past_due_ledger`
+         WHERE  date >= '$minRange' AND date <= '$maxRange' AND include_week = 1 AND branch_name = '$full_name') as total_debit, (SELECT SUM(credit) FROM `past_due_ledger`
+         WHERE  date >= '$minRange' AND date <= '$maxRange' AND credit >= 0 AND branch_name = '$full_name') as total;
          ");
 	
 		$stmt -> execute();
@@ -457,17 +490,9 @@ static public function mdlShowGetPrevBalance($branch_name1, $account_no, $dateFr
 
     
 static public function mdlEditPastDueAccount($table, $data){
-    
-    $branch_name =  $data["branch_name"];
-    $account_no =  $data["account_no"];
-    $chkAcc =  $data["chkAcc"];
-    if($chkAcc == $account_no){
-        $check = "ok";
-    }else{
-        $check= (new ModelPastDue)->mdlAccountChecker($account_no, $branch_name);
-    }
+  
 
-    if($check == "ok"){
+    
 
 	$stmt = (new Connection)->connect()->prepare("UPDATE $table SET last_name = :last_name, first_name = :first_name, middle_name = :middle_name,
     branch_name = :branch_name, account_no = :account_no, age = :age, address = :address, balance = :balance, type = :type,
@@ -498,10 +523,6 @@ static public function mdlEditPastDueAccount($table, $data){
 	}else{
 		return "error";
 	}
-    }else{
-        return "error2";
-    }
-	
 
 }
 
@@ -713,15 +734,15 @@ static public function mdlCheckFullyPaid($branch_name, $account_no){
     (SELECT SUM(debit) FROM past_due_ledger WHERE branch_name = '$branch_name' AND account_no = '$account_no') AS total_debit,
       (SELECT SUM(credit) FROM past_due_ledger WHERE branch_name = '$branch_name' AND account_no = '$account_no') AS total_credit,
     (SELECT -SUM(balance) FROM past_due WHERE branch_name = '$branch_name' AND account_no = '$account_no') + 
-    (SELECT SUM(debit) FROM past_due_ledger WHERE branch_name = '$branch_name' AND account_no = '$account_no')+ 
-    (SELECT SUM(credit) FROM past_due_ledger WHERE branch_name = '$branch_name' AND account_no = '$account_no') AS result;");
+    (SELECT SUM(debit) FROM past_due_ledger WHERE branch_name = '$branch_name' AND account_no = '$account_no' )+ 
+    (SELECT SUM(credit) FROM past_due_ledger WHERE branch_name = '$branch_name' AND account_no = '$account_no') AS result");
     $stmt -> execute();
     return $stmt -> fetchAll();
     $stmt -> close();
     $stmt = null;
 }
 static public function mdlGetAllPDRPerBranch($selectedbranch_name){
-    $stmt = (new Connection)->connect()->prepare("SELECT * FROM past_due WHERE branch_name = '$selectedbranch_name'");
+    $stmt = (new Connection)->connect()->prepare("SELECT * FROM past_due WHERE branch_name = '$selectedbranch_name' AND class NOT IN ('F', 'W') ORDER by account_no;");
     $stmt -> execute();
     return $stmt -> fetchAll();
     $stmt -> close();
@@ -731,14 +752,161 @@ static public function mdlGetAllPDRPerBranch($selectedbranch_name){
 static public function mdlGetAllBadAccounts($branch_name, $lastMonth){
   
     $stmt = (new Connection)->connect()->prepare("SELECT
-    (SELECT COUNT(type) FROM past_due WHERE branch_name = '$branch_name' AND refdate <= '$lastMonth' AND
-     (class = 'P' OR class = 'D') ) AS total_Bad,
-      (SELECT -SUM(balance) FROM past_due WHERE branch_name = '$branch_name' AND refdate <='$lastMonth' ) AS total_balance,
-      (SELECT SUM(debit) FROM past_due_ledger WHERE branch_name = '$branch_name' AND date <= '$lastMonth' ) AS total_debit,
-        (SELECT SUM(credit) FROM past_due_ledger WHERE branch_name = '$branch_name' AND date <= '$lastMonth' ) AS total_credit,
-      (SELECT -SUM(balance) FROM past_due WHERE branch_name = '$branch_name' AND refdate <= '$lastMonth')
-       + (SELECT SUM(debit) FROM past_due_ledger WHERE branch_name = '$branch_name' AND date <= '$lastMonth' )+ 
-      (SELECT SUM(credit) FROM past_due_ledger WHERE branch_name = '$branch_name' AND date <= '$lastMonth') AS result;");
+    COALESCE(
+        (
+            SELECT COUNT(account_no)
+            FROM past_due
+            WHERE branch_name = '$branch_name'
+            AND refdate <= '$lastMonth'
+            AND class NOT IN ('F', 'W')
+        ), 0
+    ) + COALESCE(
+        (
+            SELECT COUNT(account_no)
+            FROM past_due
+            WHERE branch_name = '$branch_name'
+            AND date_change > '$lastMonth'
+        ), 0
+    ) AS total_Bad,
+
+    (COALESCE(
+        (
+            SELECT -SUM(balance)
+            FROM past_due
+            WHERE branch_name = '$branch_name'
+            AND refdate <= '$lastMonth'
+            AND class NOT IN ('F', 'W')
+        ), 0
+    )
+    +
+    COALESCE(
+        (
+            SELECT -SUM(balance)
+            FROM past_due
+            WHERE branch_name = '$branch_name'
+            AND date_change > '$lastMonth'   AND refdate <= '$lastMonth'
+          
+        ), 0
+    ))
+    +
+    COALESCE(
+        (
+            SELECT SUM(pl.debit)
+            FROM past_due_ledger pl
+            INNER JOIN (
+                SELECT branch_name, account_no
+                FROM past_due
+                WHERE branch_name = '$branch_name'
+                AND class NOT IN ('F', 'W')  AND refdate <= '$lastMonth'
+            ) pd ON pl.branch_name = pd.branch_name AND pl.account_no = pd.account_no
+            WHERE pl.date <= '$lastMonth'
+        ), 0
+    )
+    +
+    COALESCE(
+        (
+            SELECT SUM(pl.debit)
+            FROM past_due_ledger pl
+            INNER JOIN (
+                SELECT branch_name, account_no
+                FROM past_due
+                WHERE branch_name = '$branch_name'
+                AND date_change > '$lastMonth'   AND refdate <= '$lastMonth'
+            ) pd ON pl.branch_name = pd.branch_name AND pl.account_no = pd.account_no
+            WHERE pl.date <= '$lastMonth'
+        ), 0
+    )
+    +
+    COALESCE(
+        (
+            SELECT SUM(pl.credit)
+            FROM past_due_ledger pl
+            INNER JOIN (
+                SELECT branch_name, account_no
+                FROM past_due
+                WHERE branch_name = '$branch_name'
+                AND class NOT IN ('F', 'W')   AND refdate <= '$lastMonth'
+            ) pd ON pl.branch_name = pd.branch_name AND pl.account_no = pd.account_no
+            WHERE pl.date <= '$lastMonth'
+        ), 0
+    )
+    +
+    COALESCE(
+        (
+            SELECT SUM(pl.credit)
+            FROM past_due_ledger pl
+            INNER JOIN (
+                SELECT branch_name, account_no
+                FROM past_due
+                WHERE branch_name = '$branch_name'
+                AND date_change > '$lastMonth'   AND refdate <= '$lastMonth'
+            ) pd ON pl.branch_name = pd.branch_name AND pl.account_no = pd.account_no
+            WHERE pl.date <= '$lastMonth'
+        ), 0
+    ) AS result;
+");
+    $stmt -> execute();
+    return $stmt -> fetchAll();
+    $stmt -> close();
+    $stmt = null;
+}
+
+
+static public function mdlGetGoodToBad($branch_name, $month, $lastDay){
+  
+    $stmt = (new Connection)->connect()->prepare("SELECT account_no, branch_name, refdate, balance FROM `past_due` WHERE branch_name = '$branch_name' AND refdate >= '$month' 
+    AND refdate <= '$lastDay'");
+    
+    $stmt -> execute();
+    return $stmt -> fetchAll();
+    $stmt -> close();
+    $stmt = null;
+}
+
+static public function mdlGetGoodToBad1($account_no, $branch_name, $refdate){
+  
+    $stmt = (new Connection)->connect()->prepare("SELECT sum(debit) as debit FROM `past_due_ledger` WHERE account_no = '$account_no' AND branch_name = '$branch_name' AND date = '$refdate'");
+    $stmt -> execute();
+    return $stmt -> fetchAll();
+    $stmt -> close();
+    $stmt = null;
+}
+
+static public function mdlGetMiscellaneous($branch_name, $month, $lastDay){
+  
+    $stmt = (new Connection)->connect()->prepare("SELECT sum(debit) as debit FROM `past_due_ledger` WHERE branch_name = '$branch_name' AND date >= '$month' 
+    AND date <= '$lastDay' AND pay_mis = 1");
+    
+    $stmt -> execute();
+    return $stmt -> fetchAll();
+    $stmt -> close();
+    $stmt = null;
+}
+
+static public function mdlGetPDRWrittenOff($branch_name, $month, $lastDay){
+  
+    $stmt = (new Connection)->connect()->prepare("SELECT
+    (SELECT COUNT(account_no) FROM past_due WHERE branch_name = '$branch_name' AND date_change >= '$month' AND  date_change <= '$lastDay' AND class = 'W' ) AS total_w,
+ (SELECT SUM(balance) FROM past_due WHERE branch_name = '$branch_name' AND date_change >= '$month' AND  date_change <= '$lastDay' AND class = 'W'  )
+ +
+(SELECT SUM(debit) FROM past_due_ledger a INNER JOIN past_due b ON a.account_no = b.account_no AND a.branch_name = b.branch_name WHERE a.branch_name = '$branch_name' AND b.date_change >= '$month' AND  b.date_change <= '$lastDay' AND b.class = 'W')
++ 
+(SELECT SUM(credit) FROM past_due_ledger a INNER JOIN past_due b ON a.account_no = b.account_no AND a.branch_name = b.branch_name WHERE a.branch_name = '$branch_name' AND b.date_change >= '$month' AND  b.date_change <= '$lastDay' AND b.class = 'W') AS result;");
+    
+    $stmt -> execute();
+    return $stmt -> fetchAll();
+    $stmt -> close();
+    $stmt = null;
+}
+
+static public function mdlGetFullyPaid($branch_name, $month, $lastDay){
+  
+    $stmt = (new Connection)->connect()->prepare("SELECT
+    (SELECT COUNT(account_no) FROM past_due WHERE branch_name = '$branch_name' AND date_change >= '$month' 
+    AND  date_change <= '$lastDay' AND class = 'F' ) AS total_f,
+
+(SELECT SUM(credit) FROM past_due_ledger WHERE branch_name = '$branch_name' AND date >= '$month' AND  date <= '$lastDay') as total_collection");
+    
     $stmt -> execute();
     return $stmt -> fetchAll();
     $stmt -> close();
