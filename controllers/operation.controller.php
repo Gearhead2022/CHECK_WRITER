@@ -7,8 +7,8 @@ class ControllerOperation{
 		return $answer;
 	}
 
-    static public function ctrGetBeginningBal($full_name){
-		$answer = (new ModelOperation)->mdlGetBeginningBal($full_name);
+    static public function ctrGetGrossinBal($branch_name, $type){
+		$answer = (new ModelOperation)->mdlGetGrossinBal($branch_name, $type);
 		return $answer;
 	}
 
@@ -66,7 +66,7 @@ class ControllerOperation{
             "sales_rep"=>$_POST["sales_rep"],
             "returnee"=>$_POST["returnee"],
             "runners_agent"=>$_POST["runners_agent"],
-            "transfer"=>$_POST["transfer"],
+            "transfer"=>$_POST["gros_transfer"],
             "date"=>$_POST["date"]);
     
             $answer = (new ModelOperation)->mdlAddGrossin($table, $data);
@@ -153,4 +153,203 @@ class ControllerOperation{
         
             }
     }
+
+    static public function ctrGetGrossinCumi($previousDate, $full_name){
+        $answer = (new ModelOperation)->mdlGetGrossinCumi($previousDate, $full_name);
+		return $answer;
+    }
+    static public function ctrGetOutgoingCumi($previousDate, $full_name){
+        $answer = (new ModelOperation)->mdlGetOutgoingCumi($previousDate, $full_name);
+		return $answer; 
+
+    }
+
+    static public function ctrShowGrossinIdOperation($id){
+		$answer = (new ModelOperation)->mdlShowGrossinIdOperation($id);
+		return $answer;
+	}
+
+    static public function ctrShowOutgoingIdOperation($id){
+		$answer = (new ModelOperation)->mdlShowOutgoingIdOperation($id);
+		return $answer;
+	}
+
+    static public function ctrEditGrossin(){
+
+		if(isset($_POST["editGrossin"])){
+			$table = "op_grossin";
+						$data = array("id"=>$_POST["id"],
+                                    "date"=>$_POST["date"],
+									"walkin"=>$_POST["walkin"],
+								"sales_rep"=>$_POST["sales_rep"],
+								"returnee"=>$_POST["returnee"],
+								"transfer"=>$_POST["gros_transfer"],
+								"runners_agent"=>$_POST["runners_agent"]);
+                
+
+				$answer = (new ModelOperation)->mdlEditGrossin($table, $data);
+
+				if($answer == "ok"){
+					echo'<script>
+
+					swal({
+						type: "success",
+						title: "Record Update Succesfully!",
+						showConfirmButton: true,
+						confirmButtonText: "Ok"
+						}).then(function(result){
+									if (result.value) {
+									window.location = "";
+									}
+								})
+					</script>';
+				}elseif($answer == "error"){
+					echo'<script>
+
+					swal({
+						type: "warning",
+						title: "Theres an error occur!",
+						showConfirmButton: true,
+						confirmButtonText: "Ok"
+						}).then(function(result){
+									if (result.value) {
+									window.location = "";
+									}
+								})
+					</script>';
+				}
+
+		}
+	}
+    static public function ctrEditOutGoing(){
+
+		if(isset($_POST["editOutgoing"])){
+			$table = "op_outgoing";
+						$data = array("id"=>$_POST["id"],
+                                    "date"=>$_POST["date"],
+									"fully_paid"=>$_POST["fully_paid"],
+								"deceased"=>$_POST["deceased"],
+								"transfer"=>$_POST["transfer"],
+								"gawad"=>$_POST["gawad"],
+								"bad_accounts"=>$_POST["bad_accounts"]);
+                
+
+				$answer = (new ModelOperation)->mdlEditOutGoing($table, $data);
+
+				if($answer == "ok"){
+					echo'<script>
+
+					swal({
+						type: "success",
+						title: "Record Update Succesfully!",
+						showConfirmButton: true,
+						confirmButtonText: "Ok"
+						}).then(function(result){
+									if (result.value) {
+									window.location = "";
+									}
+								})
+					</script>';
+				}elseif($answer == "error"){
+					echo'<script>
+
+					swal({
+						type: "warning",
+						title: "Theres an error occur!",
+						showConfirmButton: true,
+						confirmButtonText: "Ok"
+						}).then(function(result){
+									if (result.value) {
+									window.location = "";
+									}
+								})
+					</script>';
+				}
+
+		}
+	}
+
+    static public function ctrDeleteOperation(){
+            if(isset($_GET['idClient']) && isset($_GET['type'])){
+
+                $type = $_GET['type'];
+                $id = $_GET['idClient'];
+                if($type === "grossin"){
+                    $table = "op_grossin";
+                }elseif($type === "outgoing"){
+                    $table = "op_outgoing";
+                }
+                
+                $data = $_GET["idClient"];
+            
+                $answer = (new ModelOperation)->mdlDelete($table, $data);
+                if($answer == "ok"){
+                    
+                    echo'<script>
+    
+                    swal({
+                          type: "success",
+                          title: "Record has been successfully deleted!",
+                          showConfirmButton: true,
+                          confirmButtonText: "Ok"
+                          }).then(function(result){
+                                    if (result.value) {
+                                    window.location = "operations";
+                                    }
+                                })
+                    </script>';
+                }else if($answer == "error"){
+                    echo'<script>
+    
+                    swal({
+                          type: "warning",
+                          title: "Theres an error occur!",
+                          showConfirmButton: true,
+                          confirmButtonText: "Ok"
+                          }).then(function(result){
+                                    if (result.value) {
+                                    
+                                    }
+                                })
+                    </script>';
+    
+                }	
+    
+    
+            }
+    
+        }
+        static public function ctrGetAllEMBBranches(){
+            $answer = (new ModelOperation)->mdlShowEMBBranches();
+            return $answer;
+        }
+
+
+        static public function ctrGetGrossinData($branch_name, $from, $to){
+            $answer = (new ModelOperation)->mdlGetGrossinData($branch_name, $from, $to);
+            return $answer;
+        }
+
+        static public function ctrGetOutgoingData($branch_name, $from, $to){
+            $answer = (new ModelOperation)->mdlGetOutgoingData($branch_name, $from, $to);
+            return $answer;
+        }
+
+        static public function ctrGetAllFCHBranches(){
+            $answer = (new ModelOperation)->mdlGetAllFCHBranches();
+            return $answer;
+        }
+        static public function ctrGetAllRLCBranches(){
+            $answer = (new ModelOperation)->mdlGetAllRLCBranches();
+            return $answer;
+        }
+
+        static public function ctrGetAllELCBranches(){
+            $answer = (new ModelOperation)->mdlGetAllELCBranches();
+            return $answer;
+        }
+
+
+
+
 }

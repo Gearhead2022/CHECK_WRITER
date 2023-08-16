@@ -57,10 +57,6 @@ class ControllerBackup{
 			$formatted_date = date("F d, Y", strtotime($date_now));
 			$chk_date = (new ControllerBackup)->ctrCheckDate($date_now); 
 			$subject1 = $_POST['subject'];
-
-		
-		
-
 			// Remove special characters using preg_replace()
 			$subject = preg_replace('/[^\w\s\r\n]/', '', $subject1);
 

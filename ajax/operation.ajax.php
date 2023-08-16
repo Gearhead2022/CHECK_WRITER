@@ -24,7 +24,7 @@ class operationTable{
                         $type = "WEEKLY OUTGOING ACCOUNTS";
                     }
                   
-				$buttons =  "<div class='btn-group group-round m-1'><button data-toggle='tooltip' data-placement='top' title='Edit'  class='btn btn-sm btn-success waves-effect waves-light btnViewPastDue'  idClient='".$check[$i]["id"]."' >VIEW</button><button data-toggle='tooltip' data-placement='top' title='Edit'  class='btn btn-sm btn-info waves-effect waves-light btnEditClient' idClient='".$check[$i]["id"]."'>EDIT</button><button data-toggle='tooltip' data-placement='top' title='Delete'  class='btn btn-sm btn-danger waves-effect waves-light btnDeleteClient' idClient='".$check[$i]["id"]."' ><i style='font-size: 15px;'  class='fa fa-trash'></i></button></div>";
+				$buttons =  "<div class='btn-group group-round m-1'><button data-toggle='tooltip' data-placement='top' title='Edit'  class='btn btn-sm btn-info waves-effect waves-light btnEditClient' idClient='".$check[$i]["id"]."' type='".$check[$i]["type"]."'>EDIT</button><button data-toggle='tooltip' data-placement='top' title='Delete'  class='btn btn-sm btn-danger waves-effect waves-light btnDeleteClient' idClient='".$check[$i]["id"]."' type='".$check[$i]["type"]."' ><i style='font-size: 15px;'  class='fa fa-trash'></i></button></div>";
 					$jsonData .='[	
                         "'.$check[$i]["branch_name"].'",
                         "'.$type.'",

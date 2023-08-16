@@ -76,9 +76,3 @@
 
   </div>        <!-- container-fluid -->
 </div>          <!-- content-wrapper -->
-
-<?php
-  $deleteRecord = new ControllerFullypaid();
-  $deleteRecord  -> ctrDeleteRecord();
- 
-?>
