@@ -137,7 +137,11 @@ if($mode=="dark"){?>
             $_GET["route"] == 'pastdueweeklyreport' ||
             $_GET["route"] == 'ledger' ||
             $_GET["route"] == 'operations' ||
+            $_GET["route"] == 'operationlsor' ||
             $_GET["route"] == 'operationreport' ||
+            $_GET["route"] == 'operationlsoradd' ||
+            $_GET["route"] == 'operationlsoredit' ||
+            $_GET["route"] == 'operationlsorreport' ||
             $_GET["route"] == 'checklistadd' ||
             $_GET["route"] == 'clientedit'){
           include "modules/".$_GET["route"].".php";

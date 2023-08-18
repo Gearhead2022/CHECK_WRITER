@@ -75,7 +75,6 @@ class pastdueModal{
             $data = (new ControllerPastdue)->ctrCheckFullyPaid($branch_name, $account_no);
             foreach ($data as &$item1) {
            
-          
                 $result = $item1['result'];
                 if($result == 0 && $result != ""){
                     $i++;

@@ -348,8 +348,231 @@ class ControllerOperation{
             $answer = (new ModelOperation)->mdlGetAllELCBranches();
             return $answer;
         }
+        static public function ctrAddLSORBeginningBalance(){
+      
+            if(isset($_POST["addLSORBeginning"])){
+                $table = "op_lsor_begin";
+                $data = array("dateto"=>$_POST["dateto"],
+                "datefrom"=>$_POST["datefrom"],
+                "branch_name"=>$_POST["branch_name"],
+                "amount"=>$_POST["amount"]);
+                    $answer = (new ModelOperation)->mdlAddLSORBeginningBalance($table, $data);
+                    if($answer == "ok"){
+                    echo'<script>
+                    swal({
+                    type: "success",
+                    title: "Beginning Balance Succesfully Added!",
+                    showConfirmButton: true,
+                    confirmButtonText: "Ok"
+                    }).then(function(result){
+                                if (result.value) {
+                                window.location = "";
+                                }
+                            })
+                    </script>';
+                    }elseif($answer == "error"){
+                    echo'<script>
+        
+                    swal({
+                    type: "warning",
+                    title: "Theres an error occur!",
+                    showConfirmButton: true,
+                    confirmButtonText: "Ok"
+                    }).then(function(result){
+                                if (result.value) {
+                                window.location = "";
+                                }
+                            })
+                    </script>';
+                    }
+        
+                }
+            }
+
+            static public function ctrAddLSOR(){
+      
+                if(isset($_POST["add_lsor"])){
+                    $table = "op_lsor";
+                    $data = array("branch_name"=>$_POST["branch_name"],
+                                "date"=>$_POST["date"],
+                                "fin_stable"=>$_POST["fin_stable"],
+                                "app_wc"=>$_POST["app_wc"],
+                                "low_cashout"=>$_POST["low_cashout"],
+                                "existing_loan"=>$_POST["existing_loan"],
+                                 "other_resched_gawad"=>$_POST["other_resched_gawad"],
+                                 "other_sched_gawad"=>$_POST["other_sched_gawad"],
+                                 "sched_applynow"=>$_POST["sched_applynow"],
+                                "ssp_overage"=>$_POST["ssp_overage"],
+                                "lack_requirements"=>$_POST["lack_requirements"],
+                                 "undecided"=>$_POST["undecided"],
+                                 "refuse_transfer"=>$_POST["refuse_transfer"],
+                                "inquired_only"=>$_POST["inquired_only"],
+                                "new_policy"=>$_POST["new_policy"],
+                                "not_goodcondition"=>$_POST["not_goodcondition"],
+                                "guardianship"=>$_POST["guardianship"],
+                                "plp"=>$_POST["plp"],
+                                "not_qualified"=>$_POST["not_qualified"],
+                                "eighteen_mos_sssloan"=>$_POST["eighteen_mos_sssloan"],
+                                "on_process"=>$_POST["on_process"]);
+            
+                        $answer = (new ModelOperation)->AddLSOR($table, $data);
+                        if($answer == "ok"){
+                        echo'<script>
+            
+                        swal({
+                        type: "success",
+                        title: "Record Succesfully Added!",
+                        showConfirmButton: true,
+                        confirmButtonText: "Ok"
+                        }).then(function(result){
+                                    if (result.value) {
+                                    window.location = "operationlsor";
+                                    }
+                                })
+                        </script>';
+                        }elseif($answer == "error"){
+                        echo'<script>
+            
+                        swal({
+                        type: "warning",
+                        title: "Theres an error occur!",
+                        showConfirmButton: true,
+                        confirmButtonText: "Ok"
+                        }).then(function(result){
+                                    if (result.value) {
+                                    window.location = "";
+                                    }
+                                })
+                        </script>';
+                        }
+            
+                    }
+                }
+
+                static public function ctrGetLSOR($branch_name, $currentDate){
+                    $answer = (new ModelOperation)->mdlGetLSOR($branch_name, $currentDate);
+                    return $answer;
+                }
+
+                static public function ctrGetBeginLSOR($branch_name){
+                    $answer = (new ModelOperation)->mdlGetBeginLSOR($branch_name);
+                    return $answer;
+                }
+                static public function ctrShowOperationLSOR($branch_name){
+                    $table = "op_lsor";
+                    $answer = (new ModelOperation)->mdlShowOperationLSOR($branch_name, $table);
+                    return $answer;
+                }
+
+                static public function ctrGetBeginLSORReport($branch_name, $month){
+                    $answer = (new ModelOperation)->mdlGetBeginLSORReport($branch_name, $month);
+                    return $answer;
+                }
+
+                static public function ctrGetAllLSOR($branch_name, $firstDay, $lastDay){
+                    $answer = (new ModelOperation)->mdlGetAllLSOR($branch_name, $firstDay, $lastDay);
+                    return $answer;
+                }
 
 
+                static public function ctrEditLSOR(){
+      
+                    if(isset($_POST["edit_lsor"])){
+                        $table = "op_lsor";
+                        $data = array("id"=>$_POST["id"],
+                                    "date"=>$_POST["date"],
+                                    "fin_stable"=>$_POST["fin_stable"],
+                                    "app_wc"=>$_POST["app_wc"],
+                                    "low_cashout"=>$_POST["low_cashout"],
+                                    "existing_loan"=>$_POST["existing_loan"],
+                                     "other_resched_gawad"=>$_POST["other_resched_gawad"],
+                                     "other_sched_gawad"=>$_POST["other_sched_gawad"],
+                                     "sched_applynow"=>$_POST["sched_applynow"],
+                                    "ssp_overage"=>$_POST["ssp_overage"],
+                                    "lack_requirements"=>$_POST["lack_requirements"],
+                                     "undecided"=>$_POST["undecided"],
+                                     "refuse_transfer"=>$_POST["refuse_transfer"],
+                                    "inquired_only"=>$_POST["inquired_only"],
+                                    "new_policy"=>$_POST["new_policy"],
+                                    "not_goodcondition"=>$_POST["not_goodcondition"],
+                                    "guardianship"=>$_POST["guardianship"],
+                                    "plp"=>$_POST["plp"],
+                                    "not_qualified"=>$_POST["not_qualified"],
+                                    "eighteen_mos_sssloan"=>$_POST["eighteen_mos_sssloan"],
+                                    "on_process"=>$_POST["on_process"]);
+                
+                            $answer = (new ModelOperation)->mdlEditLSOR($table, $data);
+                            if($answer == "ok"){
+                            echo'<script>
+                
+                            swal({
+                            type: "success",
+                            title: "Record Succesfully Updated!",
+                            showConfirmButton: true,
+                            confirmButtonText: "Ok"
+                            }).then(function(result){
+                                        if (result.value) {
+                                        window.location = "operationlsor";
+                                        }
+                                    })
+                            </script>';
+                            }elseif($answer == "error"){
+                            echo'<script>
+                
+                            swal({
+                            type: "warning",
+                            title: "Theres an error occur!",
+                            showConfirmButton: true,
+                            confirmButtonText: "Ok"
+                            }).then(function(result){
+                                        if (result.value) {
+                                        window.location = "";
+                                        }
+                                    })
+                            </script>';
+                            }
+                
+                        }
+                    }
 
-
+                    static public function ctrDeleteLSOR(){
+                        if(isset($_GET['idClient'])){
+                         $table = "op_lsor";
+                         $data = $_GET["idClient"];
+                            $answer = (new ModelOperation)->mdlDelete($table, $data);
+                            if($answer == "ok"){
+                                echo'<script>
+                
+                                swal({
+                                      type: "success",
+                                      title: "Record has been successfully deleted!",
+                                      showConfirmButton: true,
+                                      confirmButtonText: "Ok"
+                                      }).then(function(result){
+                                                if (result.value) {
+                                                window.location = "operationlsor";
+                                                }
+                                            })
+                                </script>';
+                            }else if($answer == "error"){
+                                echo'<script>
+                
+                                swal({
+                                      type: "warning",
+                                      title: "Theres an error occur!",
+                                      showConfirmButton: true,
+                                      confirmButtonText: "Ok"
+                                      }).then(function(result){
+                                                if (result.value) {
+                                                
+                                                }
+                                            })
+                                </script>';
+                
+                            }	
+                
+                
+                        }
+                
+                    }
 }

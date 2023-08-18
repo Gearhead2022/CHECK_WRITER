@@ -254,12 +254,12 @@ class ModelBackup{
 	}	
 
 
-	static public function mdlCheckBackup($startDateFormatted){
+	static public function mdlCheckBackup($dateSlct){
 		
 			$stmt = (new Connection)->connect()->prepare("SELECT a.user_id, a.full_name
 			FROM accounts a
 			LEFT JOIN backup b 
-				ON a.user_id = b.user_id AND b.date_time LIKE '$startDateFormatted%'
+				ON a.user_id = b.user_id AND b.date_time LIKE '$dateSlct%'
 			WHERE b.user_id IS NULL AND a.full_name LIKE 'EMB%' OR a.full_name LIKE 'FCH%' OR a.full_name LIKE 'RLC%' OR a.full_name LIKE 'ELC%'
 			ORDER BY a.full_name;");
 

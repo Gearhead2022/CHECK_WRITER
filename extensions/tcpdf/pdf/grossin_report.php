@@ -15,7 +15,7 @@ public function getClientsPrinting(){
 
 
 //   $pdf = new TCPDF('L', PDF_UN IT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-  $pdf = new TCPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+  $pdf = new TCPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
   $pdf->startPageGroup();
   $pdf->setPrintHeader(false);  /*remove line on top of the page*/
 
@@ -33,7 +33,7 @@ $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
 // set margins
-$pdf->SetMargins(5,5);
+$pdf->SetMargins(10,10);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
@@ -75,25 +75,45 @@ $Operation = new ControllerOperation();
 $from = $_GET['from'];
 $to = $_GET['to'];
 
+$formatted_to = date("m/d/Y", strtotime($to));
+
 $prev = date("Y-m-d", strtotime("-1 day", strtotime($from)));
-    
+
+$formatted_prev = date("m/d/Y", strtotime($prev));
+$combDate =  strtoupper(date("M d", strtotime($from)) . " - " . date("d", strtotime($to)));
+
+  
 $header = <<<EOF
+
         <h5>EMB & FCH</h5>
         <h5>BRANCH WEEKLY GROSS IN</h5>
-        <h6>FOR THE PERIOD JUNE 1-2</h6>
+        <h6>FOR THE PERIOD $combDate</h6>
+        <style>
+             tr,th{
+            border:1px solid black;
+            font-size:7rem;
+            text-align:center;
+        }
+             tr, td{
+            border:1px solid black;
+            font-size:6.9rem;
+            text-align:center;
+        }
+        </style>
         <table>
             <thead>
             <tr>
-                <th rowspan="2" style="text-align: center; vertical-align: middle; font-size: 15px; margin-bottom: 20px;">BRANCH</th>
-                <th rowspan="2" style="text-align: center; vertical-align: middle; font-size: 12px; margin-bottom: 20px;">as of $prev</th>
+                <th style="text-align: center; width: 90px; vertical-align: middle;font-size:7.9rem;border:1px solid black;padding:5rem;font-weight:bold;" rowspan="2"><span style="color:white;">d</span><br>BRANCH<br><span style="color:white;">ds</span></th>
+                <th rowspan="2" style="text-align:center; font-size: 10px;"><span style="color:white;">s</span><br>as of $formatted_prev</th>
                 <th>WALK IN</th>
                 <th>SALES REP</th>
                 <th>RETURNEE</th>
-                <th>RUNNERS / AGENT</th>
+                <th>RUNNERS /<br> AGENT</th>
                 <th>TRANSFER</th>
                 <th>TOTAL IN</th>
                 <th>CUM. TOTAL</th>
             </tr>
+          
             <tr>
                 <th></th>
                 <th></th>
@@ -101,8 +121,9 @@ $header = <<<EOF
                 <th></th>
                 <th></th>
                 <th></th>
-                <th>as of to</th>
+                <th>as of $formatted_to</th>
             </tr>
+            <tr><td colspan="9" style="border:none;font-weight:bold;text-align:left;">EMB:</td></tr>
         </thead>
         <tbody>
         EOF;
@@ -168,10 +189,12 @@ $header = <<<EOF
         }
         $total_grossin_cumi = $final_grossinCumi + $walkin + $sales_rep + $returnee + $runners_agent + $gros_transfer;
         $total_grossin = $walkin + $sales_rep + $returnee + $runners_agent +  $gros_transfer;
+
+        $new_branch_name = str_replace("EMB", "", $branch_name);
        
         $header .= <<<EOF
             <tr>
-            <td>$branch_name</td>
+            <td style="width: 90px; text-align: left;">&nbsp;&nbsp;$new_branch_name</td>
             <td>$final_grossinCumi</td>
             <td>$walkin</td>
             <td>$sales_rep</td>
@@ -210,17 +233,11 @@ $header .= <<<EOF
 EOF;
 
 $header .= <<<EOF
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
+      
+
+        <tr><td colspan="9" style="border:none;"></td></tr>
+        <tr><td colspan="9" style="border:none;"></td></tr>
+        <tr><td colspan="9" style="border:none;"></td></tr>
 EOF;
 $grand_totalCumi = 0;
 $grand_totalWalkin = 0;
@@ -288,16 +305,16 @@ foreach ($getFCH as $fch) {
    
     $header .= <<<EOF
         <tr>
-        <td>$branch_name</td>
-        <td>$final_grossinCumi</td>
-        <td>$walkin</td>
-        <td>$sales_rep</td>
-        <td>$returnee</td>
-        <td>$runners_agent</td>
-        <td>$gros_transfer</td>
-        <td>$total_grossin</td>
-        <td>$total_grossin_cumi</td>
-    </tr>
+             <td style="width: 90px; text-align: left;" >&nbsp;&nbsp;$branch_name</td>
+            <td>$final_grossinCumi</td>
+            <td>$walkin</td>
+            <td>$sales_rep</td>
+            <td>$returnee</td>
+            <td>$runners_agent</td>
+            <td>$gros_transfer</td>
+            <td>$total_grossin</td>
+            <td>$total_grossin_cumi</td>
+        </tr>
     EOF;
 
 $grand_totalCumi += $final_grossinCumi;
@@ -327,32 +344,25 @@ $header .= <<<EOF
 EOF;
 
 $header .= <<<EOF
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
     </tbody>
 </table>
 EOF;
+
+
 $header .= <<<EOF
-        <h5>RLC & ELC</h5>
-        <h5>BRANCH WEEKLY GROSS IN</h5>
+        <h5 style="color:white;">dfsdfsdfsdfsdfsdf</h5>
+       
+        <h6>RLC & ELC<br>BRANCH WEEKLY GROSS IN</h6>
+        
         <table>
             <thead>
             <tr>
-                <th rowspan="2" style="text-align: center; vertical-align: middle; font-size: 15px; margin-bottom: 20px;">BRANCH</th>
-                <th rowspan="2" style="text-align: center; vertical-align: middle; font-size: 12px; margin-bottom: 20px;">as of $prev</th>
-                <th>WALK IN</th>
+                <th style="text-align: center;width: 90px; vertical-align: middle;font-size:7.9rem;border:1px solid black;padding:5rem;font-weight:bold;" rowspan="2"><span style="color:white;">d</span><br>BRANCH<br><span style="color:white;">ds</span></th>
+                <th rowspan="2" style="text-align:center; font-size: 10px;"><span style="color:white;">s</span><br>as of $formatted_prev</th>
+                <th style="border:1px solid black;">WALK IN</th>
                 <th>SALES REP</th>
                 <th>RETURNEE</th>
-                <th>RUNNERS / AGENT</th>
+                <th>RUNNERS /<br> AGENT</th>
                 <th>TRANSFER</th>
                 <th>TOTAL IN</th>
                 <th>CUM. TOTAL</th>
@@ -364,7 +374,7 @@ $header .= <<<EOF
                 <th></th>
                 <th></th>
                 <th></th>
-                <th>as of to</th>
+                <th>as of $formatted_to</th>
             </tr>
         </thead>
         <tbody>
@@ -434,7 +444,7 @@ $header .= <<<EOF
        
         $header .= <<<EOF
             <tr>
-            <td>$branch_name</td>
+            <td style="width: 90px; text-align: left;" >&nbsp;&nbsp;$branch_name</td>
             <td>$final_grossinCumi</td>
             <td>$walkin</td>
             <td>$sales_rep</td>
@@ -474,28 +484,23 @@ EOF;
 
 $header .= <<<EOF
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td colspan="9" style="border:none;"></td>
+          
         </tr>
+    </tbody>
+    </table>
 EOF;
 
 $header .= <<<EOF
         <table>
             <thead>
             <tr>
-                <th rowspan="2" style="text-align: center; vertical-align: middle; font-size: 15px; margin-bottom: 20px;">BRANCH</th>
-                <th rowspan="2" style="text-align: center; vertical-align: middle; font-size: 12px; margin-bottom: 20px;">as of $prev</th>
-                <th>WALK IN</th>
+                <th style="text-align: center;width: 90px; vertical-align: middle;font-size:7.9rem;border:1px solid black;padding:5rem;font-weight:bold;" rowspan="2"><span style="color:white;">d</span><br>BRANCH<br><span style="color:white;">ds</span></th>
+                <th rowspan="2" style="text-align:center; font-size: 10px;"><span style="color:white;">s</span><br>as of $formatted_prev</th>
+                <th>WALK IN<br></th>
                 <th>SALES REP</th>
                 <th>RETURNEE</th>
-                <th>RUNNERS / AGENT</th>
+                <th>RUNNERS /<br> AGENT</th>
                 <th>TRANSFER</th>
                 <th>TOTAL IN</th>
                 <th>CUM. TOTAL</th>
@@ -507,7 +512,7 @@ $header .= <<<EOF
                 <th></th>
                 <th></th>
                 <th></th>
-                <th>as of to</th>
+                <th>as of $formatted_to</th>
             </tr>
         </thead>
         <tbody>
@@ -579,7 +584,7 @@ $header .= <<<EOF
        
         $header .= <<<EOF
             <tr>
-            <td>$branch_name</td>
+            <td style="width: 90px; text-align: left;" >&nbsp;&nbsp;$branch_name</td>
             <td>$final_grossinCumi</td>
             <td>$walkin</td>
             <td>$sales_rep</td>
@@ -618,17 +623,8 @@ $header .= <<<EOF
 EOF;
 
 $header .= <<<EOF
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
+        </tbody>
+    </table>
 EOF;
     $pdf->writeHTML($header, false, false, false, false, '');
     

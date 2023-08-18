@@ -1,9 +1,6 @@
 
 <style>
-  .modal-content {
-    width: 1000px;
-    margin-left: -221px;
-} 
+
 
 </style>
 <div class="clearfix"></div>
@@ -28,7 +25,7 @@
               <?php if($_SESSION['type']=="admin" || $_SESSION['type']=="backup_admin"){?>
 
               <button type="button" class="btn btn-light btn-round waves-effect waves-light m-1" onClick="location.href='backupfilter'"><i class="fa fa-folder"></i> <span>&nbsp;ADMIN FOLDER</span> </button>
-              <button type="button" id="showPrint"  class="btn btn-light btn-round waves-effect waves-light m-1" onClick="location.href='backupreport'"><i class="fa fa-print"></i> <span>&nbsp;BACKUP CHECKER</span> </button>
+              <button type="button"  class="btn btn-light btn-round waves-effect waves-light m-1" data-toggle="modal" data-target="#backupModal"><i class="fa fa-refresh"></i> <span>&nbsp;BACKUP CHECKER</span> </button>
 
               <?php  }?>
 
@@ -57,22 +54,44 @@
         </div>
       
       </div>    <!-- row -->
-      <div class="modal" id="empModal" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-      <!-- Modal content-->
-      <div class="modal-content">
-        <form method="POST" enctype="multipart/form-data"  autocomplete="off">
-          <div class="modal-header">
-            <h4 class="modal-title">Clients Profile</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>
-        <div class="modal-body">
-                  
+</div>
+
+   <!-- Modal -->
+<div class="modal fade" id="backupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">BACKUP CHECKER</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-md-6">
+              <label for="input-1">Select Date</label>
+              <input type="date" class="form-control checkBackup" id="checkBackup" placeholder="Enter First Name" name="first_name" autocomplete="nope" required>
+            </div>
         </div>
+        <div id="showTable" class="table-responsive" hidden>
+            <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>BRANCH NAME</th>
+                    </tr>
+                    </thead>
+                    <tbody class="reportTable">
+                    </tbody>
+            </table>
+              
+            </div>
       </div>
-      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
-   </div>
+    </div>
+  </div>
 </div>
 
     <div class="overlay toggle-menu"></div>

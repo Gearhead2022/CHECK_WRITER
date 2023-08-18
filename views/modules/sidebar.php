@@ -95,13 +95,20 @@
         </a>
       </li>
       <?php }?>
-      <?php if($_SESSION['type']=="admin" || $_SESSION['type']=="backup_user" ) {?> 
-      <li>
-      <a href="operations" class="waves-effect">
-          <i class="fa fa-tasks"></i> <span>Operation</span></i>
+     
+      <?php if($_SESSION['type']=="admin" ||  $_SESSION['type']=="backup_user") {?>
+  <li>
+        <a href="javaScript:void();" class="waves-effect">
+          <i class="fa fa-tasks"></i> <span>Operation Reports</span><i class="fa fa-angle-left pull-right"></i>
         </a>
+		<ul class="sidebar-submenu">
+		  <li><a href="operations"><i class="zmdi zmdi-dot-circle-alt"></i>Gross In & Outgoing</a></li>
+		</ul>
+    <ul class="sidebar-submenu">
+		  <li><a href="operationlsor"><i class="zmdi zmdi-dot-circle-alt"></i>LSOR</a></li>
+		</ul>
       </li>
-      <?php }?>
+  <?php } ?>
 
 
       <?php if($_SESSION['type']=="admin") {?> 

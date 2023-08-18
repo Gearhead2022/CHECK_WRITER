@@ -44,13 +44,15 @@
           <div class="card">
             <div class="card-header float-sm-right">
               <div class="row">
-                <?php if($_SESSION['type']=="admin" || $_SESSION['type']=="pastdue_user" || $_SESSION['type']=="backup_admin"){?>
-                  <button type="button" class="btn btn-light btn-round waves-effect waves-light m-1" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-plus"></i> <span>&nbsp;ADD DATABASE</span> </button>
-                  <button type="button" class="btn btn-light btn-round waves-effect waves-light m-1" data-toggle="modal" data-target="#ledgerModal"><i class="fa fa-book"></i> <span>&nbsp;ADD LEDGER</span> </button>
+                <?php 
+                
+                if($_SESSION['type']=="admin" || $_SESSION['type']=="pastdue_user" || $_SESSION['type']=="backup_admin"){?>
+                  <!-- <button type="button" class="btn btn-light btn-round waves-effect waves-light m-1" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-plus"></i> <span>&nbsp;ADD DATABASE</span> </button>
+                  <button type="button" class="btn btn-light btn-round waves-effect waves-light m-1" data-toggle="modal" data-target="#ledgerModal"><i class="fa fa-book"></i> <span>&nbsp;ADD LEDGER</span> </button> -->
                   <button type="button" class="btn btn-light btn-round waves-effect waves-light m-1" onClick="location.href='pastdueadd'"><i class="fa fa-user-plus"></i></i> <span>&nbsp;ADD ACCOUNTS</span> </button>
                   <button type="button" id="showPrint"  class="btn btn-light btn-round waves-effect waves-light m-1" onClick="location.href='pastduetarget'"><i class="fa fa-plus-circle"></i> <span>&nbsp;BRANCH TARGETS</span> </button>
-                  <button type="button" id="showPrint"  class="btn btn-light btn-round waves-effect waves-light m-1" onClick="location.href='pastdueweeklyreport'"><i class="fa fa-print"></i> <span>&nbsp;GENERATE REPORTS</span> </button>
                   <button type="button" id="showPrint"  class="btn btn-light btn-round waves-effect waves-light m-1" onClick="location.href='pastdueclassreport'"><i class="fa fa-print"></i> <span>&nbsp;CLASS REPORT</span> </button>
+                  <button type="button" id="showPrint"  class="btn btn-light btn-round waves-effect waves-light m-1" onClick="location.href='pastdueweeklyreport'"><i class="fa fa-print"></i> <span>&nbsp;WEEKLY REPORTS</span> </button>
                   <button type="button" id="showPrint"  class="btn btn-light btn-round waves-effect waves-light m-1" onClick="location.href='pastduesummary'"><i class="fa fa-print"></i> <span>&nbsp;PDR PERFORMANCE SUMMARY</span> </button>
                   <button type="button" class="btn btn-light btn-round waves-effect waves-light m-1 pastdueChecker"><i class="fa fa-refresh"></i> <span>&nbsp;CHECK DUPLICATES</span> </button>
                   <button type="button" class="btn btn-light btn-round waves-effect waves-light m-1 pastdueChecker1"><i class="fa fa-refresh"></i> <span>&nbsp;CHECK LEDGER</span> </button>

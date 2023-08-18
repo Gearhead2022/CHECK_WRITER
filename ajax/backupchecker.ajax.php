@@ -14,8 +14,8 @@ $filterBackup -> showFilter();
 class reportTable{
 	public function showFilter(){
  
-        $startDateFormatted = $_GET['dateFrom'];
-        $data = (new ControllerBackup)->ctrCheckBackup($startDateFormatted);
+        $dateSlct = $_GET['dateSlct'];
+        $data = (new ControllerBackup)->ctrCheckBackup($dateSlct);
         
         $i = 1;
         foreach ($data as &$item) {

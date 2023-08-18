@@ -42,8 +42,8 @@ class ControllerBackup{
 		
 	}
 
-	static public function ctrCheckBackup($startDateFormatted){
-		$answer = (new ModelBackup)->mdlCheckBackup($startDateFormatted);
+	static public function ctrCheckBackup($dateSlct){
+		$answer = (new ModelBackup)->mdlCheckBackup($dateSlct);
 		return $answer;
 	}
     static public function ctrCreateBackup(){

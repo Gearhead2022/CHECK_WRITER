@@ -341,5 +341,54 @@ $(".toReceive").on("click", function(){
   })
 
   
+  $(".checkBackup").on("change", function(){ 
+
+    var dateSlct1 = document.getElementById('checkBackup');
+    var dateSlct = dateSlct1.value;
+    
+  swal({
+    title: "Generating",
+    text: "Please wait...",
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    onOpen: () => {
+      swal.showLoading();
+    }
+  });
+
+    $(".reportTable").empty();
+       $.ajax({
+                url: 'ajax/backupchecker.ajax.php',
+                data: {
+                  dateSlct: dateSlct
+                },
+                dataType: 'json',
+                success: function(data) {
+                  setTimeout(() => {
+                  swal.close();
+              
+                  
+                    $.each(data, function(index, item) {
+                        var card = item.card;
+                        $('.reportTable').append(card);
+                    });
+
+                               // Get the element with the ID "showTable"
+                var element = document.getElementById("showTable");
+                var print = document.getElementById("showPrint");
+
+                // Set the hidden attribute to false to show the element
+                element.hidden = false;
+                print.hidden = false;
+              }, 1500) },
+                error: function() {
+                  swal.close();
+                    alert('Error fetching data');
+                }
+            });
+
+  })
+
+  
   
   
