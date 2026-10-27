@@ -15,3 +15,29 @@ Stack trace:
 #0 C:\xampp\htdocs\JGC_APP\email\download3.php(51): ZipArchive->close()
 #1 {main}
   thrown in C:\xampp\htdocs\JGC_APP\email\download3.php on line 51
+[18-Sep-2023 02:45:18 Europe/Berlin] PHP Warning:  filesize(): stat failed for EMB BAYAWAN July 24, 2023.zip in C:\xampp\htdocs\JGC_APP\email\download3.php on line 56
+[18-Sep-2023 02:45:18 Europe/Berlin] PHP Warning:  readfile(C:\xampp\htdocs\JGC_APP\email/EMB BAYAWAN July 24, 2023.zip): Failed to open stream: No such file or directory in C:\xampp\htdocs\JGC_APP\email\download3.php on line 59
+[18-Sep-2023 02:45:18 Europe/Berlin] PHP Warning:  unlink(C:\xampp\htdocs\JGC_APP\email/EMB BAYAWAN July 24, 2023.zip): No such file or directory in C:\xampp\htdocs\JGC_APP\email\download3.php on line 62
+[18-Sep-2023 02:45:48 Europe/Berlin] PHP Warning:  filesize(): stat failed for EMB BAYAWAN July 24, 2023.zip in C:\xampp\htdocs\JGC_APP\email\download3.php on line 56
+[18-Sep-2023 02:45:48 Europe/Berlin] PHP Warning:  readfile(C:\xampp\htdocs\JGC_APP\email/EMB BAYAWAN July 24, 2023.zip): Failed to open stream: No such file or directory in C:\xampp\htdocs\JGC_APP\email\download3.php on line 59
+[18-Sep-2023 02:45:48 Europe/Berlin] PHP Warning:  unlink(C:\xampp\htdocs\JGC_APP\email/EMB BAYAWAN July 24, 2023.zip): No such file or directory in C:\xampp\htdocs\JGC_APP\email\download3.php on line 62
+[20-Sep-2023 04:44:25 Europe/Berlin] PHP Fatal error:  Uncaught UnexpectedValueException: RecursiveDirectoryIterator::__construct(../views/files/backup/ELC BULACAN/2023/September/September 18, 2023): The system cannot find the path specifi (code: 3) in C:\xampp\htdocs\JGC_APP\email\download5.php:40
+Stack trace:
+#0 C:\xampp\htdocs\JGC_APP\email\download5.php(40): RecursiveDirectoryIterator->__construct('../views/files/...')
+#1 {main}
+  thrown in C:\xampp\htdocs\JGC_APP\email\download5.php on line 40
+[06-Oct-2023 03:11:30 Europe/Berlin] PHP Fatal error:  Uncaught UnexpectedValueException: RecursiveDirectoryIterator::__construct(../views/files/backup/admin/2023/October/October 6, 2023): The system cannot find the path specifi (code: 3) in C:\xampp\htdocs\JGC_APP\email\download3.php:41
+Stack trace:
+#0 C:\xampp\htdocs\JGC_APP\email\download3.php(41): RecursiveDirectoryIterator->__construct('../views/files/...')
+#1 {main}
+  thrown in C:\xampp\htdocs\JGC_APP\email\download3.php on line 41
+[12-Oct-2023 02:27:43 Europe/Berlin] PHP Fatal error:  Uncaught UnexpectedValueException: RecursiveDirectoryIterator::__construct(../views/files/backup/admin/2023/October/October 6, 2023): The system cannot find the path specifi (code: 3) in C:\xampp\htdocs\JGC_APP\email\download3.php:41
+Stack trace:
+#0 C:\xampp\htdocs\JGC_APP\email\download3.php(41): RecursiveDirectoryIterator->__construct('../views/files/...')
+#1 {main}
+  thrown in C:\xampp\htdocs\JGC_APP\email\download3.php on line 41
+[12-Oct-2023 02:28:16 Europe/Berlin] PHP Fatal error:  Uncaught UnexpectedValueException: RecursiveDirectoryIterator::__construct(../views/files/backup/admin/2023/October/October 6, 2023): The system cannot find the path specifi (code: 3) in C:\xampp\htdocs\JGC_APP\email\download5.php:41
+Stack trace:
+#0 C:\xampp\htdocs\JGC_APP\email\download5.php(41): RecursiveDirectoryIterator->__construct('../views/files/...')
+#1 {main}
+  thrown in C:\xampp\htdocs\JGC_APP\email\download5.php on line 41

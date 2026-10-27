@@ -1,0 +1,13 @@
+views/files/
+views/img/
+data_backups/
+vendor/
+/vendor/
+*.zip
+*.pdf
+*.rar
+*.7z
+*.mp4
+docker-compose.yml
+.env
+.env.*

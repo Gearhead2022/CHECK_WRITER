@@ -22,7 +22,9 @@
   <link href="views/assets/css/index.css" rel="stylesheet"/>
   <link href="views/assets/css/components.min.css" rel="stylesheet" type="text/css">
  
-  
+  <!-- google charts -->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
   <link href="views/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
   <link href="views/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
 
@@ -86,64 +88,13 @@ if($mode=="dark"){?>
               }
             }
 
-
         if ($_GET["route"] == 'home' || 
             $_GET["route"] == 'logout' ||
             $_GET["route"] == 'registrations' ||
             $_GET["route"] == 'clients' || 
-            $_GET["route"] == 'login' ||        
-            $_GET["route"] == 'clientadd' ||
-            $_GET["route"] == 'pspmi' ||
-            $_GET["route"] == 'fch' ||
-            $_GET["route"] == 'rlc' ||
-            $_GET["route"] == 'blacklist' || 
-            $_GET["route"] == 'blacklistadd' ||
-            $_GET["route"] == 'blacklistedit' ||
-            $_GET["route"] == 'workingpermitadd' ||
-            $_GET["route"] == 'workingpermit' ||
-            $_GET["route"] == 'workingpermitedit' ||
-            $_GET["route"] == 'showrequest' ||
-            $_GET["route"] == 'showrequests' ||
-            $_GET["route"] == 'requestadd' ||
-            $_GET["route"] == 'request' ||
-            $_GET["route"] == 'accounts' ||
-            $_GET["route"] == 'accountedit' ||
-            $_GET["route"] == 'requestedit' ||
-            $_GET["route"] == 'showbackup' ||
-            $_GET["route"] == 'backups' ||
-            $_GET["route"] == 'backupedit' ||
-            $_GET["route"] == 'backupadd' ||
-            $_GET["route"] == 'backupfilter' ||
-            $_GET["route"] == 'backupreport' ||
-            $_GET["route"] == 'download' ||
-            $_GET["route"] == 'try' ||
-            $_GET["route"] == 'fullypaid' ||
-            $_GET["route"] == 'showfullypaid' ||
-            $_GET["route"] == 'fullypaidadd' ||
-            $_GET["route"] == 'fullypaidedit' ||
-            $_GET["route"] == 'fullypaidreport1' ||
-            $_GET["route"] == 'fullypaidreport2' ||
-            $_GET["route"] == 'fullpaidreport' ||
-            $_GET["route"] == 'documentadd' ||
-            $_GET["route"] == 'checklist' ||
-            $_GET["route"] == 'pastdue' ||
-            $_GET["route"] == 'pastdueadd' ||
-            $_GET["route"] == 'pastdueedit' ||
-            $_GET["route"] == 'pastduetarget' ||
-            $_GET["route"] == 'pastdueledger' ||
-            $_GET["route"] == 'pastduesummary' ||
-            $_GET["route"] == 'pastdueclassreport' ||
-            $_GET["route"] == 'showpastdue' ||
-            $_GET["route"] == 'pastdueweeklyreport' ||
-            $_GET["route"] == 'ledger' ||
-            $_GET["route"] == 'operations' ||
-            $_GET["route"] == 'operationlsor' ||
-            $_GET["route"] == 'operationreport' ||
-            $_GET["route"] == 'operationlsoradd' ||
-            $_GET["route"] == 'operationlsoredit' ||
-            $_GET["route"] == 'operationlsorreport' ||
-            $_GET["route"] == 'checklistadd' ||
-            $_GET["route"] == 'clientedit'){
+            $_GET["route"] == 'login' ||     
+            $_GET["route"] == 'try' ||     
+            $_GET["route"] == 'checkWriter'){
           include "modules/".$_GET["route"].".php";
         }else{
            include "modules/404.php";
@@ -174,7 +125,6 @@ if($mode=="dark"){?>
   <script src="views/assets/plugins/bootstrap-datatable/js/buttons.print.min.js"></script>
   <script src="views/assets/plugins/bootstrap-datatable/js/buttons.colVis.min.js"></script>
 
-
   <script src="views/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 
   <script src="views/assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.js"></script>
@@ -200,23 +150,11 @@ if($mode=="dark"){?>
   <script src="views/assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
   <script src="views/assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
 
-  <script src="views/js/backup.js"></script>
-  <script src="views/js/checklist.js"></script>
-  <script src="views/js/clients.js"></script>
+  
   <script src="views/js/account.js"></script>
-  <script src="views/js/request.js"></script>
-  <script src="views/js/permit.js"></script>
-  <script src="views/js/blacklist.js"></script>
-  <script src="views/js/rlc.js"></script>
-  <script src="views/js/pspmi.js"></script>
-  <script src="views/js/fch.js"></script>
   <script src="views/js/index.js"></script>
-  <script src="views/js/try.js"></script>
-  <script src="views/js/fullypaid.js"></script>
-  <script src="views/js/pastdue.js"></script>
-  <script src="views/js/operations.js"></script>
-  <script src="views/js/script.numeric_key_binding.js"></script>
   <script src="views/js/autologout.js"></script>
+  <script src="views/js/checkwriter.js"></script>
 
   <script>
      $(document).ready(function() {

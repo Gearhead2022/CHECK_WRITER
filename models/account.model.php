@@ -33,7 +33,6 @@ class ModelAccounts{
 		if (!$user_id1) {
 			$id_holder = $user_id;
 		}
-
 			$stmt1 = (new Connection)->connect()->prepare("SELECT * FROM accounts WHERE username = :username LIMIT 1");
 			$stmt1->bindParam(":username", $data["username"], PDO::PARAM_STR);
 			$result1 = $stmt1 ->execute();
@@ -56,7 +55,6 @@ class ModelAccounts{
 					$stmt = null;
 				}
 			}
-
 		}catch(PDOException $exception){
 			$pdo->rollBack();
 			return "error"; 
@@ -105,7 +103,6 @@ static public function mdlEditAccounts($table, $data){
 
 	$stmt->close();
 	$stmt = null;
-
 }	
 static public function mdlShowAccount(){
 	$stmt = (new Connection)->connect()->prepare("SELECT * FROM accounts WHERE `status` = '0' ORDER BY id");

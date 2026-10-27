@@ -6,5 +6,6 @@ class ControllerTemplate{
 	}
 	static public function login(){
 		include "views/modules/login.php";
+		// include "views/modules/fingerprint.php";
 	}
 }

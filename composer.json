@@ -1,0 +1,8 @@
+{
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.29",
+        "hisamu/php-xbase": "^2.1",
+        "stefangabos/zebra_cache": "^1.3"
+     
+    }
+}

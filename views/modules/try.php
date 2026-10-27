@@ -1,78 +1,117 @@
-<?php 
+<?php
 
+function convertToWords($number) {
+    // Array containing words for numbers up to nineteen
+    $ones = array(
+        0 => '', 1 => 'one', 2 => 'two', 3 => 'three', 4 => 'four', 5 => 'five',
+        6 => 'six', 7 => 'seven', 8 => 'eight', 9 => 'nine', 10 => 'ten',
+        11 => 'eleven', 12 => 'twelve', 13 => 'thirteen', 14 => 'fourteen',
+        15 => 'fifteen', 16 => 'sixteen', 17 => 'seventeen', 18 => 'eighteen', 19 => 'nineteen'
+    );
 
-$weekfrom = '2023-06-01';
-$weekto =  '2023-06-05';
+    // Array containing words for tens
+    $tens = array(
+        20 => 'twenty', 30 => 'thirty', 40 => 'forty', 50 => 'fifty',
+        60 => 'sixty', 70 => 'seventy', 80 => 'eighty', 90 => 'ninety'
+    );
 
-$startDate = new DateTime($weekfrom);
-$endDate = new DateTime($weekto);
+    // Array containing words for larger denominations
+    $thousands = array('', 'thousand', 'million', 'billion', 'trillion', 'quadrillion', 'quintillion');
 
-$currentDate = clone $startDate;
+    // Splitting the number into dollars and cents
+   $separetor = explode('.', $number);
+   $num_elements = count($separetor);
+   if($num_elements >1){
+    list($dollars, $cents) = explode('.', $number);
+   }else{
+    list($dollars) = explode('.', $number);
+    $cents =0;
+   }
 
-$date = date('Y-m', strtotime($weekfrom));
+    // Converting dollars part to words
+    $dollars_in_words = '';
 
-$month = date('F', strtotime($weekfrom));
-$dateRange = array();
+    if ($dollars == 0) {
+        $dollars_in_words = 'zero dollars';
+    } else {
+        $dollars_in_words = convertNumberToWords($dollars, $ones, $tens, $thousands);
+    }
 
-while ($currentDate <= $endDate) {
-    $dateRange[] = $currentDate->format('Y-m-d');
-    $currentDate->modify('+1 day');
- }
-    $day1 = $dateRange[0];
-    $day2 = $dateRange[1];
-    $day3 = $dateRange[2];
-    $day4 = $dateRange[3];
-    $day5 = $dateRange[4];
+    // Converting cents part to words
+    $cents_in_words = '';
 
-    $formatted_day1 = (new DateTime($day1))->format('F d');
-    $formatted_day2 = (new DateTime($day2))->format('F d');
-    $formatted_day3 = (new DateTime($day3))->format('F d');
-    $formatted_day4 = (new DateTime($day4))->format('F d');
-    $formatted_day5 = (new DateTime($day5))->format('F d');
+    if ($cents == 0) {
+        $cents_in_words = 'ONLY';
+    } else {
+        $cents_in_words = '& ' . $cents . '/100';
+    }
 
-    $dataRange = $dateRange;
+    return ucwords($dollars_in_words . ' ' . $cents_in_words);
+}
 
-        $minDate = min($dataRange);
-        $yearMonth = substr($minDate, 0, 7); // Extract the year and month from the minimum date
+function convertNumberToWords($number, $ones, $tens, $thousands) {
+    $result = '';
 
-        $startDate = new DateTime($yearMonth . '-01'); // Set the start date to the first day of the same year and month as the minimum date
-        $endDate = new DateTime($minDate);
-        $endDate->modify('-1 day'); // Set the end date to 1 day before the minimum date
+    $number_length = strlen($number);
 
-        $Range = array();
+    // Loop through the number in groups of three digits
+    $group_count = ceil($number_length / 3);
+    $number_chunks = str_split(str_pad($number, $group_count * 3, '0', STR_PAD_LEFT), 3);
 
-
-        while ($startDate <= $endDate) {
-            $formattedDate = $startDate->format('Y-m-d');
-            if (!in_array($formattedDate, $dataRange)) {
-                $Range[] = $formattedDate;
+    // Process each group of three digits
+    foreach ($number_chunks as $key => $chunk) {
+        $chunk_number = (int)$chunk;
+        if ($chunk_number != 0) {
+            $result .= convertThreeDigitNumberToWords($chunk_number, $ones, $tens, $thousands[$group_count - $key - 1]);
+            if ($key < $group_count - 1) {
+                $result .= ' ' . $thousands[$group_count - $key - 1];
             }
-            $startDate->modify('+1 day'); // Increment the start date by 1 day
+            $result .= ' ';
+        }
+    }
+
+    return trim($result);
+}
+
+function convertThreeDigitNumberToWords($number, $ones, $tens, $thousands) {
+    $result = '';
+
+    // Extracting hundreds
+    $hundreds = floor($number / 100);
+    if ($hundreds > 0) {
+        $result .= $ones[$hundreds] . ' hundred';
+    }
+
+    // Extracting tens and ones
+    $remainder = $number % 100;
+  
+    if ($remainder > 0) {
+        if ($hundreds > 0) {
+            $result .= ' ';
         }
 
-        if (empty($Range)) {
+        if ($remainder < 20) {
+            $result .= $ones[$remainder];
+        } else {
+            $tens_digit = floor($remainder / 10) * 10;
+            $result .= $tens[$tens_digit];
+          
+            if (isset($ones[$remainder % 10])) {
+                if($remainder % 10 == 0){
+                    $result .= ' ' . $ones[$remainder % 10];
+                }else{
+                    $result .= '-' . $ones[$remainder % 10];
+                    
+                }
+                
+            }
+        }
+    }
 
-           $timestamp = strtotime($weekfrom . ' -1 month');
+    return $result;
+}
 
-              // Get the first day of the previous month
-              $minRange = date('Y-m-01', $timestamp);
-
-              // Get the last day of the previous month
-            $maxRange = date('Y-m-t', $timestamp);
-         
-      }else{
-
-        $minRange = min($Range);
-        $maxRange = max($Range);
-      }
-
-
-        $date1 = date('F j', strtotime($minRange));
-        $date2 = date('j', strtotime($maxRange));
-        $combinedDates = $date1 . '-' . $date2;
-
-        echo $combinedDates;
-
-
-    
-     
+// Example usage
+$amount = 342333.50;
+echo convertToWords($amount);
+?>

@@ -150,7 +150,7 @@ h2,p{
                   required>
         
             <button type="submit" class="save" name="login">Login</button>
-            <!-- <button type="button" onclick="window.location.href='views/modules/registration.php'" class="signup" >Sign Up </button> -->
+            <!-- <button type="button" onclick="window.location.href='views/modules/fingerprint.php'" class="signup">Finger Print Login </button> -->
             </div>
       </div>
   </div>
@@ -163,7 +163,6 @@ h2,p{
 
 </body>
  
-
 <!-- <script type="text/javascript">
   $(".submit").click(function(){
   window.open("Views/template.php","_blank");

@@ -1,0 +1,5 @@
+#.htaccess
+vendor/
+views/files/
+views/img/
+

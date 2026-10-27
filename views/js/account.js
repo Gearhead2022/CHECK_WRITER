@@ -5,22 +5,23 @@ $('.accountTable').DataTable({
     "processing": true
   });
   
-  // $("#side").on("click", function(){
-    
-  //   swal({
-  //         title: 'Are you sure you want to logout?',
-  //         type: 'warning',
-  //         showCancelButton: true,
-  //         confirmButtonColor: '#3085d6',
-  //         cancelButtonColor: '#d33',
-  //         cancelButtonText: 'cancel',
-  //         confirmButtonText: 'Yes'
-  //       }).then(function(result){
-  //         if (result.value) {
-  //             window.location = "logout";
-  //         }
-  //   })
-  // })
+  $("#logout").on("click", function(){
+  
+    swal({
+          title: 'Are you sure you want to logout?',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'cancel',
+          confirmButtonText: 'Yes'
+        }).then(function(result){
+          if (result.value) {
+              window.location = "logout";
+          }
+    })
+  })
+  
   
   $(".accountTable").on("click", "tbody .btnDeleteClient", function(){
     var idClient = $(this).attr("idClient");
